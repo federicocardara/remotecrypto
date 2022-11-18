@@ -9,27 +9,36 @@ import java.util.Base64;
 
 public class Server {
     private static final int SERVER_SOURCE_PORT=50001;
-    public String getGreeting() {
-        return "Hello World!";
-    }
+    private static boolean dataIsEmpty =false;
 
     public static void main(String[] args) throws IOException {
         var serverSocket=new ServerSocket(SERVER_SOURCE_PORT);
-        System.out.println(serverSocket.getLocalPort());
 
         var newServerSocketFromClientSocketConnectionToServerSocket=serverSocket.accept();
-        System.out.println("breakpoint");
 
         var input=new BufferedReader(new InputStreamReader(newServerSocketFromClientSocketConnectionToServerSocket.getInputStream()));
         var output=new PrintWriter(newServerSocketFromClientSocketConnectionToServerSocket.getOutputStream());
-
-        var data=input.readLine();
-
-        var encoder= Base64.getEncoder();
-
-        output.println(encoder.encodeToString(data.getBytes()));
+        output.println("This socket returns any given string in base64. To terminate the connection, enter a null string.");
         output.flush();
-        
+
+        output.print("Enter the string that you wish to get the Base64 from:");
+        output.flush();
+        var data = input.readLine();
+
+        while (!dataIsEmpty) {
+            if(!data.equals("")) {
+                var encoder = Base64.getEncoder();
+                output.println("Base64: "+encoder.encodeToString(data.getBytes()));
+                output.flush();
+                output.print("Enter the string that you wish to get the Base64 from:");
+                output.flush();
+                data = input.readLine();
+            }else {
+                dataIsEmpty = !dataIsEmpty;
+            }
+        }
+        output.println("You have terminated the connection.");
+        output.flush();
         newServerSocketFromClientSocketConnectionToServerSocket.close();
 
     }
