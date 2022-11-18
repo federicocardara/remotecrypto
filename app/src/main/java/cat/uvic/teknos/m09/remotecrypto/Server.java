@@ -5,27 +5,69 @@ package cat.uvic.teknos.m09.remotecrypto;
 
 import java.io.*;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Base64;
 import java.util.Scanner;
+import java.util.concurrent.Executors;
 
 public class Server {
     public static final int PORT = 50001;
 
+    public static ServerSocket server;
+
+    public static Runnable worker =() ->{
+        encode();
+    };
+
+
+
+
     public static void main(String[] args) throws IOException {
 
-        var server = new ServerSocket(PORT);
+        server = new ServerSocket(PORT);
         System.out.println("Server listening on port" + server.getLocalPort());
 
-        var client = server.accept();
+        var threadExecutor = Executors.newFixedThreadPool(5);
+        while (!threadExecutor.isShutdown()){
+            var client = server.accept();
+            threadExecutor.execute(worker);
+        }
 
-        var outputStream = new PrintWriter(client.getOutputStream());
+        threadExecutor.shutdown();
+    }
+
+
+    public static void encode(){
+        Socket client = null;
+        try {
+            client = server.accept();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        PrintWriter outputStream = null;
+        try {
+            outputStream = new PrintWriter(client.getOutputStream());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         outputStream.println("Type text to encode in base64 otherwise press enter");
         outputStream.flush();
 
-        var inputStream = new BufferedReader(new InputStreamReader( client.getInputStream()));
+        BufferedReader inputStream = null;
+        try {
+            inputStream = new BufferedReader(new InputStreamReader( client.getInputStream()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        var data = inputStream.readLine();
+        String data = null;
+        try {
+            data = inputStream.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         var encoder = Base64.getEncoder();
 
@@ -34,12 +76,18 @@ public class Server {
             outputStream.flush();
             outputStream.println("Type text to encode in base64 otherwise press enter");
             outputStream.flush();
-            data = inputStream.readLine();
+            try {
+                data = inputStream.readLine();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
         }
-        client.close();
-
+        try {
+            client.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-
 
 }
