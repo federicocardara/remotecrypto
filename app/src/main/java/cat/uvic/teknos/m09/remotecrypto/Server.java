@@ -9,41 +9,14 @@ import java.net.Socket;
 import java.util.Base64;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Server {
     public static final int PORT = 50001;
+    public static Socket client;
 
-    public static ServerSocket server;
-
-    public static Runnable worker =() ->{
-        encode();
-    };
-
-
-
-
-    public static void main(String[] args) throws IOException {
-
-        server = new ServerSocket(PORT);
-        System.out.println("Server listening on port" + server.getLocalPort());
-
-        var threadExecutor = Executors.newFixedThreadPool(5);
-        while (!threadExecutor.isShutdown()){
-            var client = server.accept();
-            threadExecutor.execute(worker);
-        }
-
-        threadExecutor.shutdown();
-    }
-
-
-    public static void encode(){
-        Socket client = null;
-        try {
-            client = server.accept();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public static Runnable worker = () ->{
+        System.out.println("Thread: " + Thread.currentThread().getName());
 
         PrintWriter outputStream = null;
         try {
@@ -85,9 +58,76 @@ public class Server {
         }
         try {
             client.close();
+            Thread.currentThread().stop();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    };
+
+    public static void main(String[] args) throws IOException {
+
+        var server = new ServerSocket(PORT);
+        System.out.println("Server listening on port" + server.getLocalPort());
+
+        var threadExecutor = Executors.newFixedThreadPool(3);
+
+
+        while (true){
+            var client = server.accept();
+            threadExecutor.execute(() -> {
+                System.out.println("Thread: " + Thread.currentThread().getName());
+
+                PrintWriter outputStream = null;
+                try {
+                    outputStream = new PrintWriter(client.getOutputStream());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                outputStream.println("Type text to encode in base64 otherwise press enter");
+                outputStream.flush();
+
+                BufferedReader inputStream = null;
+                try {
+                    inputStream = new BufferedReader(new InputStreamReader( client.getInputStream()));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                String data = null;
+                try {
+                    data = inputStream.readLine();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                var encoder = Base64.getEncoder();
+
+                while (!data.equals("")){
+                    outputStream.println(encoder.encodeToString(data.getBytes()));
+                    outputStream.flush();
+                    outputStream.println("Type text to encode in base64 otherwise press enter");
+                    outputStream.flush();
+                    try {
+                        data = inputStream.readLine();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+                try {
+                    client.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+        }
+
+
+
+
     }
+
 
 }
