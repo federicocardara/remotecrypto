@@ -17,68 +17,14 @@ public class Server {
     public static void main(String[] args) throws IOException {
 
         var server = new ServerSocket(PORT);
-        System.out.println("Server listening on port" + server.getLocalPort());
 
-        var threadExecutor = Executors.newFixedThreadPool(3);
+        var threadExecutor = Executors.newFixedThreadPool(3); // Up to 3 clients at the same time
 
 
         while (true){
-            var client = server.accept();
+            var client = server.accept(); // Awaits for client connection
             var thread = new ClientThread(client);
-            threadExecutor.execute(thread);
-//
-//            threadExecutor.execute(() -> {
-//                System.out.println("Thread: " + Thread.currentThread().getName());
-//
-//                PrintWriter outputStream = null;
-//                try {
-//                    outputStream = new PrintWriter(client.getOutputStream());
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//
-//                outputStream.println("Type text to encode in base64 otherwise press enter");
-//                outputStream.flush();
-//
-//                BufferedReader inputStream = null;
-//                try {
-//                    inputStream = new BufferedReader(new InputStreamReader( client.getInputStream()));
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//
-//                String data = null;
-//                try {
-//                    data = inputStream.readLine();
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//
-//                var encoder = Base64.getEncoder();
-//
-//                while (!data.equals("")){
-//                    outputStream.println(encoder.encodeToString(data.getBytes()));
-//                    outputStream.flush();
-//                    outputStream.println("Type text to encode in base64 otherwise press enter");
-//                    outputStream.flush();
-//                    try {
-//                        data = inputStream.readLine();
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//
-//                }
-//                try {
-//                    client.close();
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            });
-//
+            threadExecutor.execute(thread); // Runs run method from the clientTrhead
         }
-
-
     }
-
-
 }
