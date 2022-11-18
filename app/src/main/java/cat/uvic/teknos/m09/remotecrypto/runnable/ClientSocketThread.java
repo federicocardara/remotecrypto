@@ -1,25 +1,26 @@
-package cat.uvic.teknos.m09.remotecrypto;
+package cat.uvic.teknos.m09.remotecrypto.runnable;
+
+import cat.uvic.teknos.m09.remotecrypto.exceptions.RemoteCryptoException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.sql.SQLOutput;
 import java.util.Base64;
 
 public class ClientSocketThread implements Runnable {
-    private Socket newServerSocketFromClientSocketConnectionToServerSocket;
+    private Socket clientSocket;
     private  boolean dataIsEmpty =false;
     public ClientSocketThread(Socket client) {
-        this.newServerSocketFromClientSocketConnectionToServerSocket=client;
+        this.clientSocket =client;
     }
 
     @Override
     public void run() {
         try {
-            var input = new BufferedReader(new InputStreamReader(newServerSocketFromClientSocketConnectionToServerSocket.getInputStream()));
-            var output = new PrintWriter(newServerSocketFromClientSocketConnectionToServerSocket.getOutputStream());
+            var input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            var output = new PrintWriter(clientSocket.getOutputStream());
 
             output.println("This socket returns any given string in base64. To terminate the connection, enter a null string.");
             output.flush();
@@ -43,12 +44,12 @@ public class ClientSocketThread implements Runnable {
             output.println("You have terminated the connection.");
             output.flush();
             System.out.println();
-            Thread.sleep(10);
-            newServerSocketFromClientSocketConnectionToServerSocket.close();
+            Thread.sleep(10); //DO NOT DELETE
+            clientSocket.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RemoteCryptoException("An exception occurred while closing the socket: "+clientSocket.toString(),e);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new RemoteCryptoException("An exception occurred while trying to make thread "+Thread.currentThread().getName()+" sleep for 10 milliseconds",e);
         }
     }
 }

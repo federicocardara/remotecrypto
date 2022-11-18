@@ -3,28 +3,20 @@
  */
 package cat.uvic.teknos.m09.remotecrypto;
 
+import cat.uvic.teknos.m09.remotecrypto.runnable.ClientSocketThread;
+
 import java.io.*;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Base64;
 
 public class Server {
     private static final int SERVER_SOURCE_PORT=50001;
-
-
-    private static  ServerSocket serverSocket;
-
     public static void main(String[] args) throws IOException {
-        serverSocket=new ServerSocket(SERVER_SOURCE_PORT);
+        var serverSocket=new ServerSocket(SERVER_SOURCE_PORT);
         while (true) {
             var clientSocket=serverSocket.accept();
             System.out.println("new connection");
             Thread thread=new Thread(new ClientSocketThread(clientSocket));
             thread.start();
         }
-
-
-    }
-    private static void stringToBase64Connection() {
     }
 }
