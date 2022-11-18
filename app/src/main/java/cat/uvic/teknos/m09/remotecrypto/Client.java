@@ -1,5 +1,7 @@
 package cat.uvic.teknos.m09.remotecrypto;
 
+import cat.uvic.teknos.m09.remotecrypto.exeptions.IncorrectDataException;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Base64;
@@ -27,24 +29,19 @@ public class Client extends Thread {
             try {
                 data = inputStream.readLine(); // get data from client
 
-                System.out.println(data);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            if(data.equals("")) {
-                exit = !exit;
-                try {
+                if(data.equals("")) {
+                    exit = !exit;
                     socket.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            else{
-                outputStream.println(encoder.encodeToString(data.getBytes()));
+                } else{
+                    outputStream.println(encoder.encodeToString(data.getBytes()));
 
-                outputStream.flush();
+                    outputStream.flush();
+                }
+
+            } catch (IOException e) {
+                throw new IncorrectDataException();
             }
         }
+
     }
 }
