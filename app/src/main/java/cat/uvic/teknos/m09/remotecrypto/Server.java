@@ -2,39 +2,36 @@ package cat.uvic.teknos.m09.remotecrypto;
 
 import java.io.*;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Base64;
 
-public class  Server {
+public class Server {
     private static final int PORT = 50001;
-    private int counterUser = 0;
+
 
     public static void main(String[] args) throws IOException {
 
         var server = new ServerSocket(PORT);
-        var client = server.accept();
 
-        var inputStream = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        var outputStream = new PrintWriter(client.getOutputStream());
+        while (true){
+            var client = server.accept();
 
-        var data = "";
+            try
+            {
 
-        var encoder = Base64.getEncoder();
+                var inputStream = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                var outputStream = new PrintWriter(client.getOutputStream());
 
-        var exit = true;
-        while(exit) { // while for enter text multiple time
+                Thread thread = new Client(client, inputStream, outputStream);
 
-            data = inputStream.readLine(); // data from client
+                thread.start();
 
-            if(data.equals(""))
-                exit = !exit;
-            else{
-                outputStream.println(encoder.encodeToString(data.getBytes()));
-
-                outputStream.flush();
+            }
+            catch (Exception e){
+                e.printStackTrace();
             }
         }
-        client.close();
-
 
     }
+
 }
