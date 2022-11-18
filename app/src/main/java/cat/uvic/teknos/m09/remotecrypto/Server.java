@@ -5,41 +5,26 @@ package cat.uvic.teknos.m09.remotecrypto;
 
 import java.io.*;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Base64;
 
 public class Server {
     private static final int SERVER_SOURCE_PORT=50001;
-    private static boolean dataIsEmpty =false;
+
+
+    private static  ServerSocket serverSocket;
 
     public static void main(String[] args) throws IOException {
-        var serverSocket=new ServerSocket(SERVER_SOURCE_PORT);
-
-        var newServerSocketFromClientSocketConnectionToServerSocket=serverSocket.accept();
-
-        var input=new BufferedReader(new InputStreamReader(newServerSocketFromClientSocketConnectionToServerSocket.getInputStream()));
-        var output=new PrintWriter(newServerSocketFromClientSocketConnectionToServerSocket.getOutputStream());
-        output.println("This socket returns any given string in base64. To terminate the connection, enter a null string.");
-        output.flush();
-
-        output.print("Enter the string that you wish to get the Base64 from:");
-        output.flush();
-        var data = input.readLine();
-
-        while (!dataIsEmpty) {
-            if(!data.equals("")) {
-                var encoder = Base64.getEncoder();
-                output.println("Base64: "+encoder.encodeToString(data.getBytes()));
-                output.flush();
-                output.print("Enter the string that you wish to get the Base64 from:");
-                output.flush();
-                data = input.readLine();
-            }else {
-                dataIsEmpty = !dataIsEmpty;
-            }
+        serverSocket=new ServerSocket(SERVER_SOURCE_PORT);
+        while (true) {
+            var clientSocket=serverSocket.accept();
+            System.out.println("new connection");
+            Thread thread=new Thread(new ClientSocketThread(clientSocket));
+            thread.start();
         }
-        output.println("You have terminated the connection.");
-        output.flush();
-        newServerSocketFromClientSocketConnectionToServerSocket.close();
 
+
+    }
+    private static void stringToBase64Connection() {
     }
 }

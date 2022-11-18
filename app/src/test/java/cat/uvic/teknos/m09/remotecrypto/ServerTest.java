@@ -9,6 +9,5 @@ import static org.junit.jupiter.api.Assertions.*;
 class ServerTest {
     @Test void serverHasAGreeting() {
         Server classUnderTest = new Server();
-        assertNotNull(classUnderTest.getGreeting(), "server should have a greeting");
     }
 }
