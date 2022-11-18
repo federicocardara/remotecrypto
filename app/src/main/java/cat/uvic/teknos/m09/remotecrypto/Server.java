@@ -3,7 +3,7 @@
  */
 package cat.uvic.teknos.m09.remotecrypto;
 
-import cat.uvic.teknos.m09.remotecrypto.runnable.ClientSocketThread;
+import cat.uvic.teknos.m09.remotecrypto.runnable.ConnectionServerClient;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -14,8 +14,7 @@ public class Server {
         var serverSocket=new ServerSocket(SERVER_SOURCE_PORT);
         while (true) {
             var clientSocket=serverSocket.accept();
-            System.out.println("new connection");
-            Thread thread=new Thread(new ClientSocketThread(clientSocket));
+            Thread thread=new Thread(new ConnectionServerClient(clientSocket));
             thread.start();
         }
     }
