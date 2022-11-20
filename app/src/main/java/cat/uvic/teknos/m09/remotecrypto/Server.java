@@ -2,7 +2,6 @@ package cat.uvic.teknos.m09.remotecrypto;
 
 import cat.uvic.teknos.m09.remotecrypto.exeptions.InputOutputStreamException;
 import cat.uvic.teknos.m09.remotecrypto.exeptions.ServerSocketException;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -31,7 +30,7 @@ public class Server {
             } catch (IOException e){
                 throw new InputOutputStreamException();
             }
-            Thread thread = new Client(client, inputStream, outputStream);
+            Thread thread = new Thread(new Client(client, inputStream, outputStream)::clientConecction);
 
             thread.start();
         }

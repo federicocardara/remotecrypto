@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class IncorrectDataException extends RuntimeException {
 
-    public String IncorrectDataException() {
-        return "ERROR: INCORRECT DATA ENTER";
+    public void IncorrectDataException() {
+        System.out.println("ERROR: INCORRECT DATA ENTER");
     }
 }
