@@ -51,9 +51,9 @@ public class ServerTelnetThread implements Runnable{
 
         CryptoUtils cryptoUtils = new CryptoUtils();
         while (!data.equals("")){ //loop till client press enter key it repeats the process of reading and showing the text in base 64
-
             try {
-                outputStream.println(cryptoUtils.hash(data.getBytes()));
+            String  str = cryptoUtils.hash(data.getBytes()).getHash().toString();
+                outputStream.println(str);
             } catch (MissingPropertiesException e) {
                 throw new RuntimeException(e);
             } catch (NoSuchAlgorithmException e) {
@@ -69,6 +69,8 @@ public class ServerTelnetThread implements Runnable{
             }
         }
         try {
+            outputStream.println("Connection Close");
+            outputStream.flush();
             client.close(); //Client session ends
             Thread.currentThread().stop(); //Thread dies aswell
         } catch (IOException e) {

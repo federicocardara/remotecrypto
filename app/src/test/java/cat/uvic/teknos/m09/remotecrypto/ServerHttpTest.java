@@ -12,12 +12,13 @@ public class ServerHttpTest {
         RawHttp rawHttp = new RawHttp();
 
         RawHttpRequest request = rawHttp.parseRequest(
-                "GET /localhost:5002/cryptoutils/hash" +
+                "GET /localhost:50002/cryptoutils/hash?text=ABC" +
                         "User-Agent: Carlota" +
                         "Host: localhost" +
                         "Accept-Language: en, mi");
-        Socket socket = new Socket("www.example.com", 80);
+        Socket socket = new Socket("localhost", 5002);
         request.writeTo(socket.getOutputStream());
+
     }
 
 }

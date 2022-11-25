@@ -12,13 +12,34 @@ import java.util.concurrent.Executors;
 public class ServerHttp {
     private static RawHttp http = new RawHttp();
     public static int PORT = 50002;
+    private ServerSocket server;
+    private Thread serverThread;
 
     public ServerHttp() throws IOException {
+        serverThread = new Thread(()->{
+            try{
+
+            server = new ServerSocket(PORT);
+            System.out.println("Server Http Start...");
+            listener();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        });
+
+        serverThread.start();
+    }
+
+    private void listener() throws IOException {
         ExecutorService pool = Executors.newFixedThreadPool(10);
-        ServerSocket server = new ServerSocket(PORT);
+        while(true){
+            System.out.println("waiting for client...");
+            Socket client  = server.accept();
+            pool.execute(new ServerHttpThread(client));
+        }
+    }
 
-        Socket client  = server.accept();
-        pool.execute(new ServerHttpThread(client));
-
+    public void join() throws InterruptedException {
+        serverThread.join();
     }
 }
