@@ -1,4 +1,6 @@
-package cat.uvic.teknos.m09.remotecrypto;
+package cat.uvic.teknos.m09.remotecrypto.servers;
+
+import cat.uvic.teknos.m09.remotecrypto.servers.thread.ServerTelnetThread;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -8,7 +10,7 @@ public class ServerTelnet  {
 
     public static final int PORT = 50001;
 
-    public static void main(String[] args) throws IOException {
+    public ServerTelnet() throws IOException {
         var server = new ServerSocket(PORT);
 
         var threadExecutor = Executors.newFixedThreadPool(3); // Up to 3 clients at the same time

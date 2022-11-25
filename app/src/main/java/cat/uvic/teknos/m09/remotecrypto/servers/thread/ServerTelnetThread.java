@@ -1,4 +1,4 @@
-package cat.uvic.teknos.m09.remotecrypto;
+package cat.uvic.teknos.m09.remotecrypto.servers.thread;
 
 import java.io.BufferedReader;
 import java.io.IOException;

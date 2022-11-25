@@ -1,15 +1,13 @@
-package cat.uvic.teknos.m09.remotecrypto;
+package cat.uvic.teknos.m09.remotecrypto.servers;
 
-import cat.uvic.teknos.m09.remotecrypto.thread.ServerHttpThread;
+import cat.uvic.teknos.m09.remotecrypto.servers.thread.ServerHttpThread;
 import rawhttp.core.RawHttp;
-import rawhttp.core.RawHttpRequest;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class ServerHttp {
     private static RawHttp http = new RawHttp();
