@@ -10,10 +10,23 @@ public class Client {
         var client=new Socket("localhost",SERVER_PORT);
         var inputStream=new BufferedReader((new InputStreamReader(client.getInputStream())));
         var outputStream=new PrintWriter(client.getOutputStream());
-        outputStream.println("");
+
+        outputStream.println("ggj");
         outputStream.flush();
         inputStream.readLine();
         var hash=inputStream.readLine();
+        System.out.println(hash);
+
+        outputStream.println("yyy");
+        outputStream.flush();
+        inputStream.readLine();
+        hash=inputStream.readLine();
+        System.out.println(hash);
+
+        outputStream.println("");
+        outputStream.flush();
+        inputStream.readLine();
+        hash=inputStream.readLine();
         System.out.println(hash);
         client.close();
     }
