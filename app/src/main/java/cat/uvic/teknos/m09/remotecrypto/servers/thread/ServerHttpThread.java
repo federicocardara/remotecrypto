@@ -21,7 +21,6 @@ public class ServerHttpThread implements Runnable {
             RawHttpRequest request = http.parseRequest(client.getInputStream());
             if (request.getUri().getPath().equals("/cryptoutils/hash")) {
                 BodyReader reader = request.getBody().orElse(null);
-
                 http.parseResponse("HTTP/1.1 200 OK\n" +
                         "Content-Type: text/plain\n" +
                         "Content-Length: 9\n" +
