@@ -20,7 +20,6 @@ public class Server {
 
         var threadExecutor = Executors.newFixedThreadPool(3); // Up to 3 clients at the same time
 
-
         while (true){
             var client = server.accept(); // Awaits for client connection
             var thread = new ClientThread(client);
