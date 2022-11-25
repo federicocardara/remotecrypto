@@ -10,11 +10,10 @@ import java.net.ServerSocket;
 
 public class Server {
     private static final int SERVER_SOURCE_PORT=50001;
-    public static void main(String[] args) throws IOException {
-        var serverSocket=new ServerSocket(SERVER_SOURCE_PORT);
+    public static void main(String[] args) throws IOException {var serverSocket=new ServerSocket(SERVER_SOURCE_PORT);
         while (true) {
             var clientSocket=serverSocket.accept();
-            Thread thread=new Thread(new ConnectionServerClient(clientSocket));
+            Thread thread=new Thread(new ConnectionServerClient(clientSocket)::clientConnection);
             thread.start();
         }
     }

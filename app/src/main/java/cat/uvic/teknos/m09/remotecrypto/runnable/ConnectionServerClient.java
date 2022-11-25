@@ -9,16 +9,16 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Base64;
 
-public class ConnectionServerClient implements Runnable {
+public class ConnectionServerClient  {
     private Socket clientSocket;
     private  boolean dataIsEmpty =false;
-    
+
     public ConnectionServerClient(Socket clientSocket) {
         this.clientSocket =clientSocket;
     }
 
-    @Override
-    public void run() {
+
+    public void clientConnection() {
         try {
             var input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             var output = new PrintWriter(clientSocket.getOutputStream());
@@ -35,7 +35,7 @@ public class ConnectionServerClient implements Runnable {
                     var encoder = Base64.getEncoder();
                     output.println("Base64: "+encoder.encodeToString(data.getBytes()));
                     output.flush();
-                    output.print("Enter the string that you wish to get the Base64 from: ");
+                    output.println("Enter the string that you wish to get the Base64 from: ");
                     output.flush();
                     data = input.readLine();
                 }else {
