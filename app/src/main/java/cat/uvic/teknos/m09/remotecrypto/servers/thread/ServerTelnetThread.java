@@ -1,10 +1,14 @@
 package cat.uvic.teknos.m09.remotecrypto.servers.thread;
 
+import cat.uvic.teknos.m09.elbouzzaouiabdelkarim.cryptoutils.CryptoUtils;
+import cat.uvic.teknos.m09.elbouzzaouiabdelkarim.cryptoutils.Exceptions.MissingPropertiesException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 public class ServerTelnetThread implements Runnable{
@@ -25,6 +29,7 @@ public class ServerTelnetThread implements Runnable{
             throw new RuntimeException("Output stream null",e);
         }
 
+
         outputStream.println("Type text to encode in base64 otherwise press enter");
         outputStream.flush();
 
@@ -42,11 +47,18 @@ public class ServerTelnetThread implements Runnable{
             throw new RuntimeException("Nothing to read",e);
         }
 
-        var encoder = Base64.getEncoder();
+//        var encoder = Base64.getEncoder();
 
+        CryptoUtils cryptoUtils = new CryptoUtils();
         while (!data.equals("")){ //loop till client press enter key it repeats the process of reading and showing the text in base 64
 
-            outputStream.println(encoder.encodeToString(data.getBytes()));
+            try {
+                outputStream.println(cryptoUtils.hash(data.getBytes()));
+            } catch (MissingPropertiesException e) {
+                throw new RuntimeException(e);
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
             outputStream.flush();
             outputStream.println("Type text to encode in base64 otherwise press enter");
             outputStream.flush();
