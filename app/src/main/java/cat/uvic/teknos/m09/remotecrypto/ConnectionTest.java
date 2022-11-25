@@ -23,15 +23,15 @@ public class ConnectionTest {
 
     public void connection(){
         try {
-
             RawHttpRequest request = http.parseRequest(client.getInputStream());
+            System.out.println(request.getUri().getQuery());
 
             if (request.getUri().getPath().equals("/saysomething")) {
                 http.parseResponse("HTTP/1.1 200 OK\n" +
                         "Content-Type: text/plain\n" +
-                        "Content-Length: 9\n" +
+                        "Content-Length: 16\n" +
                         "\n" +
-                        "something").writeTo(client.getOutputStream());
+                        "en pol no fa res").writeTo(client.getOutputStream());
             } else {
                 http.parseResponse("HTTP/1.1 404 Not Found\n" +
                         "Content-Type: text/plain\n" +
