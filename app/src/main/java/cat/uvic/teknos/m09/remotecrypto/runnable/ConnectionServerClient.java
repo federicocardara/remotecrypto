@@ -22,23 +22,20 @@ public class ConnectionServerClient  {
         try {
             var input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             var output = new PrintWriter(clientSocket.getOutputStream());
-
-            output.println("This socket returns any given string in base64. To terminate the connection, enter an empty string.");
-            output.flush();
-
-            output.print("Enter the string that you wish to get the Base64 from: ");
+            output.println("Enter the string that you wish to get the Base64 from: ");
             output.flush();
             String data;
+            Thread.sleep(50);
             data = input.readLine();
             while (!dataIsEmpty) {
-                if(!data.equals("")) {
+                if (!data.equals("")) {
                     var encoder = Base64.getEncoder();
-                    output.println("Base64: "+encoder.encodeToString(data.getBytes()));
+                    output.println("Base64: " + encoder.encodeToString(data.getBytes()));
                     output.flush();
                     output.println("Enter the string that you wish to get the Base64 from: ");
                     output.flush();
                     data = input.readLine();
-                }else {
+                } else {
                     dataIsEmpty = !dataIsEmpty;
                 }
             }
