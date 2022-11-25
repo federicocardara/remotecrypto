@@ -6,6 +6,8 @@ package cat.uvic.teknos.m09.remotecrypto;
 import java.io.*;
 import java.net.ServerSocket;
 import java.util.Base64;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class Server {
 
@@ -13,25 +15,13 @@ public class Server {
 
     public static void main(String[] args) throws IOException {
         var server = new ServerSocket(PORT);
-        System.out.println("Server listening on port "+server.getLocalPort());
 
-        var client= server.accept();
+        var threadExecutor = Executors.newFixedThreadPool(2);
 
-        var inputStream = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        var outputStream = new PrintWriter(client.getOutputStream());
-
-        var data = inputStream.readLine();
-
-        while(data!=""){
-            var encoder = Base64.getEncoder();
-            outputStream.println(encoder.encodeToString(data.getBytes()));
-            outputStream.flush();
-            data=inputStream.readLine();
+        while(true){
+            var client = server.accept();
+            var clientThread = new Client(client);
+            threadExecutor.execute(clientThread);
         }
-
-        client.close();
-
-
-
     }
 }
