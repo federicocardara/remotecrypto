@@ -6,12 +6,16 @@ import rawhttp.core.RawHttpRequest;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.http.HttpRequest;
+import java.util.concurrent.ThreadPoolExecutor;
 
-public class Server {
+public class ServerHttp {
     private static RawHttp http = new RawHttp();
     public static int PORT = 50002;
-    public static void main(String[] args) {
+
+    public ServerHttp() {
+        ThreadPoolExecutor pool = new ThreadPoolExecutor();
+
+
         try{
             run();
         }catch(Exception e){
@@ -19,11 +23,13 @@ public class Server {
         }
     }
 
-    private static void run() throws IOException {
+    private void run() throws IOException {
         ServerSocket server = new ServerSocket(PORT);
 
         Socket client  = server.accept();
         RawHttpRequest request = http.parseRequest(client.getInputStream());
+
+
 
 
     }
