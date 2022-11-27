@@ -4,12 +4,21 @@
 package cat.uvic.teknos.m09.remotecrypto;
 
 import cat.uvic.teknos.m09.remotecrypto.servers.ClusterServer;
+import cat.uvic.teknos.m09.remotecrypto.servers.HttpServer;
 import cat.uvic.teknos.m09.remotecrypto.servers.TerminalServer;
 import org.junit.jupiter.api.Test;
 
 class TerminalServerTest {
-    @Test void turnOnServers() {
-        ClusterServer clusterServer=new ClusterServer(5001,5002);
+    @Test void turnOnServers(){
+        ClusterServer clusterServer=new ClusterServer(6008,50002);
         clusterServer.turnOnServers();
+    }
+    @Test void turnOnHttpServer(){
+        HttpServer httpServer=new HttpServer(6008);
+        httpServer.turnOnServer();
+    }
+    @Test void turnOnTerminalServer(){
+        TerminalServer terminalServer=new TerminalServer(50002);
+        terminalServer.turnOnServer();
     }
 }

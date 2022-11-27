@@ -24,14 +24,14 @@ public class ConnectionHttpServerHttpClient {
     public void connection(){
         try {
             RawHttpRequest request = http.parseRequest(client.getInputStream());
-            System.out.println(request.getUri().getQuery());
+            System.out.println(request.getUri());
 
             if (request.getUri().getPath().equals("/saysomething")) {
                 http.parseResponse("HTTP/1.1 200 OK\n" +
                         "Content-Type: text/plain\n" +
-                        "Content-Length: 16\n" +
+                        "Content-Length: 25\n" +
                         "\n" +
-                        "en pol no fa res").writeTo(client.getOutputStream());
+                        "en pol es molt impacient\n").writeTo(client.getOutputStream());
             } else {
                 http.parseResponse("HTTP/1.1 404 Not Found\n" +
                         "Content-Type: text/plain\n" +

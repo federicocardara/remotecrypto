@@ -14,5 +14,8 @@ public class ClusterServer {
         var terminalServerThread=new Thread(new TerminalServer(TERMINAL_SERVER_PORT)::turnOnServer);
         httpServerThread.start();
         terminalServerThread.start();
+        while (terminalServerThread.isAlive() && httpServerThread.isAlive()){
+
+        }
     }
 }
