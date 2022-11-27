@@ -11,35 +11,34 @@ import java.net.Socket;
 
 public class HttpServer {
 
-    private static final int PORT = 8083;
-    private static RawHttp http = new RawHttp();
-    private static BufferedReader inputStream;
-    private static PrintWriter outputStream;
-    private static ServerSocket serverSoket;
-    private static Socket client;
+    private  final int PORT;
+    private  RawHttp http = new RawHttp();
+    private  BufferedReader inputStream;
+    private  PrintWriter outputStream;
+    private  ServerSocket serverSoket;
+    private  Socket client;
 
-    public static void main(String[] args) {
+    public HttpServer(int PORT) {
+        this.PORT=PORT;
+    }
+
+    public void turnOnServer() {
 
         try {
             serverSoket = new ServerSocket(PORT);
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
+            while (true){
 
-        while (true){
-
-            try {
                 client = serverSoket.accept();
 
                 inputStream = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 outputStream = new PrintWriter(client.getOutputStream());
-            } catch (IOException e){
-                throw new RuntimeException();
+
+                Thread thread = new Thread(new ConnectionHttpServerHttpClient(client, inputStream, outputStream)::connection);
+
+                thread.start();
             }
-
-            Thread thread = new Thread(new ConnectionHttpServerHttpClient(client, inputStream, outputStream)::connection);
-
-            thread.start();
+        } catch (IOException e) {
+            throw new RuntimeException();
         }
     }
 }
