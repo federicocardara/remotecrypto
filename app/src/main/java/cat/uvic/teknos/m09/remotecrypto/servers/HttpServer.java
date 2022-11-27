@@ -1,5 +1,6 @@
-package cat.uvic.teknos.m09.remotecrypto;
+package cat.uvic.teknos.m09.remotecrypto.servers;
 
+import cat.uvic.teknos.m09.remotecrypto.connections.ConnectionHttpServerHttpClient;
 import rawhttp.core.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,7 +9,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class HttpTest {
+public class HttpServer {
 
     private static final int PORT = 8083;
     private static RawHttp http = new RawHttp();
@@ -36,7 +37,7 @@ public class HttpTest {
                 throw new RuntimeException();
             }
 
-            Thread thread = new Thread(new ConnectionTest(client, inputStream, outputStream)::connection);
+            Thread thread = new Thread(new ConnectionHttpServerHttpClient(client, inputStream, outputStream)::connection);
 
             thread.start();
         }

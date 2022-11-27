@@ -1,9 +1,9 @@
-package cat.uvic.teknos.m09.remotecrypto;
+package cat.uvic.teknos.m09.remotecrypto.clients;
 
 import java.io.*;
 import java.net.Socket;
 
-public class Client {
+public class TerminalClient {
     public static final int SERVER_PORT= 50001;
 
     public static void main(String[] args) throws IOException {

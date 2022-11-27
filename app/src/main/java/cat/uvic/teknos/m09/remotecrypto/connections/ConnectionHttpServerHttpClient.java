@@ -1,4 +1,4 @@
-package cat.uvic.teknos.m09.remotecrypto;
+package cat.uvic.teknos.m09.remotecrypto.connections;
 
 import rawhttp.core.RawHttp;
 import rawhttp.core.RawHttpRequest;
@@ -7,7 +7,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Base64;
 
-public class ConnectionTest {
+public class ConnectionHttpServerHttpClient {
 
     private BufferedReader inputStream;
     private PrintWriter outputStream;
@@ -15,7 +15,7 @@ public class ConnectionTest {
     private Socket client;
     private RawHttp http = new RawHttp();
 
-    public ConnectionTest(Socket socket, BufferedReader inputStream, PrintWriter outputStream) {
+    public ConnectionHttpServerHttpClient(Socket socket, BufferedReader inputStream, PrintWriter outputStream) {
         this.client = socket;
         this.inputStream = inputStream;
         this.outputStream = outputStream;

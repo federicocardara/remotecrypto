@@ -3,11 +3,11 @@
  */
 package cat.uvic.teknos.m09.remotecrypto;
 
+import cat.uvic.teknos.m09.remotecrypto.servers.TerminalServer;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
-class ServerTest {
+class TerminalServerTest {
     @Test void serverHasAGreeting() {
-        Server classUnderTest = new Server();
+        TerminalServer classUnderTest = new TerminalServer();
     }
 }
