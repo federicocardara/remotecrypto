@@ -33,7 +33,7 @@ public class HttpServer {
                 inputStream = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 outputStream = new PrintWriter(client.getOutputStream());
 
-                Thread thread = new Thread(new ConnectionHttpServerHttpClient(client, inputStream, outputStream)::connection);
+                Thread thread = new Thread(new ConnectionHttpServerHttpClient(client, inputStream, outputStream)::processRequestResponse);
 
                 thread.start();
             }

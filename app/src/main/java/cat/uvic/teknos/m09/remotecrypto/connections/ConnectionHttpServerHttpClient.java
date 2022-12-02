@@ -1,9 +1,7 @@
 package cat.uvic.teknos.m09.remotecrypto.connections;
 
-import cat.uvic.teknos.m09.remotecrypto.exceptions.RemoteCryptoHttpException;
 import rawhttp.core.RawHttp;
 import rawhttp.core.RawHttpRequest;
-import rawhttp.core.RawHttpResponse;
 
 import java.io.*;
 import java.net.Socket;
@@ -24,13 +22,13 @@ public class ConnectionHttpServerHttpClient {
         encoder = Base64.getEncoder();
     }
 
-    public void connection(){
+    public void processRequestResponse(){
         try {
             RawHttpRequest request = http.parseRequest(client.getInputStream());
             String queryStr= request.getUri().getQuery();
             String[] query=queryStr.split("=");
             String data=query[1];
-            var encoder=Base64.getEncoder();
+
             String encodedData=new String(encoder.encode(data.getBytes()));
             System.out.println(query[1]);
 
