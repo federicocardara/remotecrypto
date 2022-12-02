@@ -1,5 +1,6 @@
 package cat.uvic.teknos.m09.remotecrypto.connections;
 
+import cat.uvic.teknos.m09.remotecrypto.exceptions.RemoteCryptoHttpException;
 import rawhttp.core.RawHttp;
 import rawhttp.core.RawHttpRequest;
 import rawhttp.core.RawHttpResponse;
@@ -26,18 +27,25 @@ public class ConnectionHttpServerHttpClient {
     public void connection(){
         try {
             RawHttpRequest request = http.parseRequest(client.getInputStream());
+            String queryStr= request.getUri().getQuery();
+            String[] query=queryStr.split("=");
+            String data=query[1];
+            var encoder=Base64.getEncoder();
+            String encodedData=new String(encoder.encode(data.getBytes()));
+            System.out.println(query[1]);
+
             String body="<!DOCTYPE html>\n" +
                     "<html>\n" +
                     "<body>\n" +
                     "\n" +
-                    "<h1>My First Heading</h1>\n" +
-                    "<p>My first paragraph.</p>\n" +
+                    "<h1>Text to Base64</h1>\n" +
+                    "<p>"+encodedData+"</p>\n" +
                     "\n" +
                     "</body>\n" +
                     "</html>";
             System.out.println(request.getUri());
             if(request.getMethod().equals("GET")) {
-                if (request.getUri().getPath().equals("/saysomething")) {
+                if (!data.equals("")) {
                     http.parseResponse(
                             "HTTP/1.1 200 OK\r\n" +
                                     "Content-Type: html\r\n" +
