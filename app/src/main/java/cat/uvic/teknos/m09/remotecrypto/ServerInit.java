@@ -3,8 +3,6 @@ package cat.uvic.teknos.m09.remotecrypto;
 import cat.uvic.teknos.m09.remotecrypto.servers.ServerHttp;
 import cat.uvic.teknos.m09.remotecrypto.servers.ServerTelnet;
 
-import java.io.IOException;
-
 public class ServerInit {
     private static ServerHttp http;
     private static ServerTelnet telnet;
@@ -18,8 +16,8 @@ public class ServerInit {
         }
     }
 
-    public static void stop(){
-        http.stop();
-        telnet.stop();
+    public static void join(){
+        http.join();
+        telnet.join();
     }
 }

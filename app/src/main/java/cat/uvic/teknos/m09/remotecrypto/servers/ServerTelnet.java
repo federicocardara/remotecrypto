@@ -1,6 +1,5 @@
 package cat.uvic.teknos.m09.remotecrypto.servers;
 
-import cat.uvic.teknos.m09.remotecrypto.servers.thread.ServerHttpThread;
 import cat.uvic.teknos.m09.remotecrypto.servers.thread.ServerTelnetThread;
 
 import java.io.IOException;
@@ -37,13 +36,13 @@ public class ServerTelnet  {
         }
     }
 
-    public void join() throws InterruptedException {
-        threadServer.join();
-    }
-
-    public void stop(){
-        threadExecutor.shutdown();
-        threadServer.stop();
+    public void join(){
+        try {
+            threadExecutor.shutdown();
+            threadServer.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

@@ -39,12 +39,13 @@ public class ServerHttp {
         }
     }
 
-    public void join() throws InterruptedException {
-        serverThread.join();
-    }
 
-    public void stop(){
-        pool.shutdown();
-        serverThread.stop();
+    public void join(){
+        try {
+            serverThread.join();
+
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

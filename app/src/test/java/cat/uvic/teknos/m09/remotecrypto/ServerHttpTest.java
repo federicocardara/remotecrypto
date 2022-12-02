@@ -38,14 +38,12 @@ public class ServerHttpTest {
 // call "eagerly()" in order to download the body
         System.out.println(response.eagerly());
 
-        ServerInit.stop();
-
 
     }
 
     @AfterAll
     private static void stopServer(){
-        ServerInit.stop();
+        ServerInit.join();
     }
 
 }
