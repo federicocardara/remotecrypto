@@ -5,11 +5,7 @@ package cat.uvic.teknos.m09.remotecrypto;
 
 import java.io.*;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Base64;
-import java.util.Scanner;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class Server {
     public static final int PORT = 50001;
@@ -21,9 +17,9 @@ public class Server {
         var threadExecutor = Executors.newFixedThreadPool(3); // Up to 3 clients at the same time
 
         while (true){
-            var client = server.accept(); // Awaits for client connection
+            var client = server.accept(); // Server stopped till a client connection
             var thread = new ClientThread(client);
-            threadExecutor.execute(thread); // Runs run method from the clientTrhead
+            threadExecutor.execute(thread); // Runs run method from the clientThread
         }
     }
 }
