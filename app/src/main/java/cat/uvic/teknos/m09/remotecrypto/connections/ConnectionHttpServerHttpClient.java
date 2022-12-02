@@ -45,6 +45,7 @@ public class ConnectionHttpServerHttpClient {
                     "</html>";
             System.out.println(request.getUri());
             if(request.getMethod().equals("GET")) {
+                //TODO BAD REQUEST if data is null or "" 400
                 if (!data.equals("")) {
                     http.parseResponse(
                             "HTTP/1.1 200 OK\r\n" +
