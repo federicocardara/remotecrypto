@@ -12,9 +12,6 @@ import java.net.Socket;
 public class HttpServer {
 
     private  final int PORT;
-    private  RawHttp http = new RawHttp();
-    private  BufferedReader inputStream;
-    private  PrintWriter outputStream;
     private  ServerSocket serverSoket;
     private  Socket client;
 
@@ -30,10 +27,7 @@ public class HttpServer {
 
                 client = serverSoket.accept();
 
-                inputStream = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                outputStream = new PrintWriter(client.getOutputStream());
-
-                Thread thread = new Thread(new ConnectionHttpServerHttpClient(client, inputStream, outputStream)::processRequestResponse);
+                Thread thread = new Thread(new ConnectionHttpServerHttpClient(client)::processRequestResponse);
 
                 thread.start();
             }

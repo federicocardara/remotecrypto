@@ -1,23 +1,21 @@
 package cat.uvic.teknos.m09.remotecrypto.connections;
 
+import cat.uvic.teknos.m09.polsane.cryptoutils.CryptoUtils;
 import rawhttp.core.RawHttp;
 import rawhttp.core.RawHttpRequest;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.Base64;
+import java.util.Properties;
 
 public class ConnectionHttpServerHttpClient {
-    private BufferedReader inputStream;
-    private PrintWriter outputStream;
     private final Base64.Encoder encoder;
     private Socket client;
     private RawHttp http;
 
-    public ConnectionHttpServerHttpClient(Socket socket, BufferedReader inputStream, PrintWriter outputStream) {
+    public ConnectionHttpServerHttpClient(Socket socket) {
         this.client = socket;
-        this.inputStream = inputStream;
-        this.outputStream = outputStream;
         http=new RawHttp();
         encoder = Base64.getEncoder();
     }
@@ -26,24 +24,24 @@ public class ConnectionHttpServerHttpClient {
         try {
             RawHttpRequest request = http.parseRequest(client.getInputStream());
             String queryStr= request.getUri().getQuery();
-            String[] query=queryStr.split("=");
+            String[] query = queryStr.split("=");
             String data=query[1];
 
-            String encodedData=new String(encoder.encode(data.getBytes()));
-            System.out.println(query[1]);
+            var hashData = CryptoUtils.hash(data.getBytes()).getHash();
+
+            String hash = new String(hashData);
 
             String body="<!DOCTYPE html>\n" +
                     "<html>\n" +
                     "<body>\n" +
                     "\n" +
                     "<h1>Text to Base64</h1>\n" +
-                    "<p>"+encodedData+"</p>\n" +
+                    "<p>"+hash+"</p>\n" +
                     "\n" +
                     "</body>\n" +
                     "</html>";
-            System.out.println(request.getUri());
+
             if(request.getMethod().equals("GET")) {
-                //TODO BAD REQUEST if data is null or "" 400
                 if (!data.equals("")) {
                     http.parseResponse(
                             "HTTP/1.1 200 OK\r\n" +
