@@ -1,5 +1,6 @@
 package cat.uvic.teknos.m09.remotecrypto;
 
+import cat.uvic.teknos.m09.matias.cryptoutils.CryptoUtils;
 import cat.uvic.teknos.m09.remotecrypto.excetptions.remoteCryptoException;
 
 import java.io.BufferedReader;
@@ -26,6 +27,7 @@ public class ClientThread implements Runnable{
         } catch (IOException e) {
             throw new remoteCryptoException("Output stream null",e);
         }
+
 
         outputStream.println("Type text to encode in base64 otherwise press enter");
         outputStream.flush();
@@ -60,7 +62,6 @@ public class ClientThread implements Runnable{
         }
         try {
             client.close(); //Client session ends
-            Thread.currentThread().stop(); //Thread dies aswell
         } catch (IOException e) {
             throw new remoteCryptoException("Null client", e);
         }
