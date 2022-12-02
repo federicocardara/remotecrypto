@@ -14,11 +14,11 @@ public class ServerHttp {
     public static int PORT = 50002;
     private ServerSocket server;
     private Thread serverThread;
+    ExecutorService pool = Executors.newFixedThreadPool(10);
 
     public ServerHttp() throws IOException {
         serverThread = new Thread(()->{
             try{
-
             server = new ServerSocket(PORT);
             System.out.println("Server Http Start...");
             listener();
@@ -31,7 +31,7 @@ public class ServerHttp {
     }
 
     private void listener() throws IOException {
-        ExecutorService pool = Executors.newFixedThreadPool(10);
+        pool = Executors.newFixedThreadPool(10);
         while(true){
             System.out.println("waiting for client...");
             Socket client  = server.accept();
@@ -41,5 +41,10 @@ public class ServerHttp {
 
     public void join() throws InterruptedException {
         serverThread.join();
+    }
+
+    public void stop(){
+        pool.shutdown();
+        serverThread.stop();
     }
 }

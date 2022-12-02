@@ -9,12 +9,17 @@ public class ServerInit {
     private static ServerHttp http;
     private static ServerTelnet telnet;
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        http = new ServerHttp();
-        telnet = new ServerTelnet();
+    public static void main(String ...args){
+        try{
+            http = new ServerHttp();
+            telnet = new ServerTelnet();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 
-        http.join();
-        telnet.join();
-
+    public static void stop(){
+        http.stop();
+        telnet.stop();
     }
 }

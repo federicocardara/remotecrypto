@@ -14,6 +14,7 @@ public class ServerTelnet  {
     public static final int PORT = 50001;
     private ServerSocket server;
     public Thread threadServer;
+    private ExecutorService threadExecutor;
     public ServerTelnet() throws IOException {
         threadServer =  new Thread(()->{
             try{
@@ -28,7 +29,7 @@ public class ServerTelnet  {
         threadServer.start();
     }
     private void listener() throws IOException {
-        var threadExecutor = Executors.newFixedThreadPool(3); // Up to 3 clients at the same time
+        threadExecutor  = Executors.newFixedThreadPool(3); // Up to 3 clients at the same time
         while(true){
             System.out.println("waiting for client...");
             Socket client  = server.accept();
@@ -38,6 +39,11 @@ public class ServerTelnet  {
 
     public void join() throws InterruptedException {
         threadServer.join();
+    }
+
+    public void stop(){
+        threadExecutor.shutdown();
+        threadServer.stop();
     }
 
 

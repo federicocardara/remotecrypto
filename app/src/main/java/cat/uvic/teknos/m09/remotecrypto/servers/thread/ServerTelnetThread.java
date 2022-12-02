@@ -47,8 +47,6 @@ public class ServerTelnetThread implements Runnable{
             throw new RuntimeException("Nothing to read",e);
         }
 
-//        var encoder = Base64.getEncoder();
-
         CryptoUtils cryptoUtils = new CryptoUtils();
         while (!data.equals("")){ //loop till client press enter key it repeats the process of reading and showing the text in base 64
             try {
