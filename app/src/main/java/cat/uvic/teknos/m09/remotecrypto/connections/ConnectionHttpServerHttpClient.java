@@ -1,6 +1,7 @@
 package cat.uvic.teknos.m09.remotecrypto.connections;
 
 import cat.uvic.teknos.m09.polsane.cryptoutils.CryptoUtils;
+import cat.uvic.teknos.m09.remotecrypto.exceptions.RemoteCryptoArrayException;
 import rawhttp.core.RawHttp;
 import rawhttp.core.RawHttpRequest;
 
@@ -56,10 +57,17 @@ public class ConnectionHttpServerHttpClient {
                             "Content-Length: 0\n" +
                             "\n").writeTo(client.getOutputStream());
                 }
+                if (query.length==0) {
+                    throw new RemoteCryptoArrayException(query, http, client.getOutputStream());
+                }
             }else {
                 //idk
             }
+
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (RemoteCryptoArrayException e) {
             e.printStackTrace();
         }
     }
