@@ -1,15 +1,15 @@
 package cat.uvic.teknos.m09.remotecrypto.servers.thread;
 
 import cat.uvic.teknos.m09.elbouzzaouiabdelkarim.cryptoutils.CryptoUtils;
+import cat.uvic.teknos.m09.elbouzzaouiabdelkarim.cryptoutils.Exceptions.MissingPropertiesException;
 import cat.uvic.teknos.m09.elbouzzaouiabdelkarim.cryptoutils.dto.DigestResult;
-import cat.uvic.teknos.m09.remotecrypto.exceptions.ConnectionException;
-import cat.uvic.teknos.m09.remotecrypto.exceptions.HttpException;
+import cat.uvic.teknos.m09.remotecrypto.exceptions.*;
 import rawhttp.core.RawHttp;
 import rawhttp.core.RawHttpRequest;
-import rawhttp.core.body.HttpMessageBody;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
 
 public class ServerHttpThread implements Runnable {
     CryptoUtils cryptoUtils = new CryptoUtils();
@@ -21,86 +21,96 @@ public class ServerHttpThread implements Runnable {
         this.client = client;
     }
 
+    public ServerHttpThread(){
+    }
+
+    public void setClient(Socket client) {
+        this.client = client;
+    }
+
     @Override
     public void run() {
+        String response = "";
         try {
             initConnection();
-            controller();
+            String path = request.getUri().getPath();
+            String query = request.getUri().getQuery();
+            String res = controller(path,query);
+            response = sendSuccessResponse(res);
 
-        } catch (HttpException e) {
-            sendInternalServerErrorResponse();
-        } catch (ConnectionException e) {
-            throw new RuntimeException(e);
+        }catch (NotFoundException e) {
+           response = sendNotFoundResponse();
+        } catch (InternalServerErrorException| HttpException | ConnectionException e) {
+           response = sendInternalServerErrorResponse();
+        } catch (BadRequestException e) {
+           response = sendBadRequestResponse();
+        }
+        sendResponse(response);
+    }
+
+    private void sendResponse(String response) {
+        try{
+            http.parseResponse(response).writeTo(client.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    private void sendBadRequestResponse() throws HttpException {
-        try{
-            http.parseResponse("HTTP/1.1 400 Bad Request\n" +
-                    "Content-Type: text/plain\n" +
-                    "Content-Length: 0\n" +
-                    "\n"
-            ).writeTo(client.getOutputStream());
-        }catch(IOException e){
-            throw new HttpException();
-        }
-    }
-
-    private void initConnection() throws ConnectionException {
-        try{
+    public void initConnection() throws ConnectionException {
+        try {
             request = http.parseRequest(client.getInputStream());
-
-        }catch(IOException e){
+        } catch (Exception e) {
             throw new ConnectionException();
         }
     }
 
-    private void controller() throws HttpException {
-        try{
-
-        if (request.
-                getUri().getPath().contains("/cryptoutils/hash")) {
-            String query = request.getUri().getQuery();
-            if(query.length()==0){
-                sendBadRequestResponse();
+    public String controller(String path, String query) throws NotFoundException, HttpException, InternalServerErrorException, BadRequestException {
+        try {
+            if (path.contains("/cryptoutils/hash")) {
+                if (query.length() == 0) {
+                    throw new BadRequestException();
+                }
+                DigestResult digest = cryptoUtils.hash(query.split("=")[1].getBytes());
+                String str = new String(digest.getHash());
+                return str;
+            } else {
+                throw new NotFoundException();
             }
-            DigestResult digest = cryptoUtils.hash(query.split("=")[1].getBytes());
-            String str = new String(digest.getHash());
-            http.parseResponse("HTTP/1.1 200 OK\n" +
-                            "Content-Type: text/plain\n" +
-                        "Content-Length: 9\n" +
-                            "\n" +
-                            str
-            ).writeTo(client.getOutputStream());
-        }else{
-            sendNotFoundResponse();
-        }
-        }catch (Exception e) {
-            throw new HttpException();
+        } catch (NotFoundException e) {
+            throw new NotFoundException();
+        } catch (NoSuchAlgorithmException| MissingPropertiesException e) {
+            throw new InternalServerErrorException();
+        } catch (BadRequestException e) {
+            throw new BadRequestException();
         }
     }
 
-    private void sendInternalServerErrorResponse(){
-        try{
-            http.parseResponse("HTTP/1.1 500 Internal Server Error\n" +
-                    "Content-Type: text/plain\n" +
-                    "Content-Length: 0\n" +
-                    "\n"
-            ).writeTo(client.getOutputStream());
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+    private String sendInternalServerErrorResponse() {
+        return "HTTP/1.1 500 Internal Server Error\n" +
+                "Content-Type: text/plain\n" +
+                "Content-Length: 0\n" +
+                "\n";
     }
 
-    private void sendNotFoundResponse(){
-        try{
-            http.parseResponse("HTTP/1.1 404 Not Found\n" +
+    private String sendNotFoundResponse() {
+        return "HTTP/1.1 404 Not Found\n" +
+                "Content-Type: text/plain\n" +
+                "Content-Length: 0\n" +
+                "\n";
+    }
+
+    private String sendSuccessResponse(String str) {
+        return "HTTP/1.1 200 OK\n" +
+                "Content-Type: text/plain\n" +
+                "Content-Length: " + str.length() + "\n" +
+                "\n" +
+                "str";
+    }
+
+    private String sendBadRequestResponse(){
+        return "HTTP/1.1 400 Bad Request\n" +
                     "Content-Type: text/plain\n" +
                     "Content-Length: 0\n" +
-                    "\n"
-            ).writeTo(client.getOutputStream());
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+                    "\n";
     }
 }
