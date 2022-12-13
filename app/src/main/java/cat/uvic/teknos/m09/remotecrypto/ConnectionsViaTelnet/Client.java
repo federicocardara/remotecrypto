@@ -1,4 +1,4 @@
-package cat.uvic.teknos.m09.remotecrypto;
+package cat.uvic.teknos.m09.remotecrypto.ConnectionsViaTelnet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
