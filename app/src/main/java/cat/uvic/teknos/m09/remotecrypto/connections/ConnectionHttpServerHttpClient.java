@@ -47,9 +47,9 @@ public class ConnectionHttpServerHttpClient {
                                 "<body>\n" +
                                 "\n" +
                                 "<h1>Data To Hash</h1>\n" +
-                                "<p>"+"Hash Byte Array In String: "+hash+"</p>\n" +
+                                "<p>"+"Hash Byte Array Inside A String: "+hash+"</p>\n" +
                                 "<p>"+"Algorithm: "+properties.getProperty("hash.algorithm")+"</p>\n" +
-                                "<p>"+"Salt Byte Array In String: "+salt+"</p>\n" +
+                                "<p>"+"Salt Byte Array Inside A String: "+salt+"</p>\n" +
                                 "\n" +
                                 "</body>\n" +
                                 "</html>";
@@ -59,7 +59,7 @@ public class ConnectionHttpServerHttpClient {
                                 "<body>\n" +
                                 "\n" +
                                 "<h1>Data To Hash</h1>\n" +
-                                "<p>"+"Hash Byte Array In String: "+hash+"</p>\n" +
+                                "<p>"+"Hash Byte Array Inside A String: "+hash+"</p>\n" +
                                 "<p>"+"Algorithm: "+properties.getProperty("hash.algorithm")+"</p>\n" +
                                 "\n" +
                                 "</body>\n" +
