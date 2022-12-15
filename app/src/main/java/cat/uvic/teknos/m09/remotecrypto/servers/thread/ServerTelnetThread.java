@@ -70,7 +70,6 @@ public class ServerTelnetThread implements Runnable{
             outputStream.println("Connection Close");
             outputStream.flush();
             client.close(); //Client session ends
-            Thread.currentThread().stop(); //Thread dies aswell
         } catch (IOException e) {
             throw new RuntimeException("Null client", e);
         }
