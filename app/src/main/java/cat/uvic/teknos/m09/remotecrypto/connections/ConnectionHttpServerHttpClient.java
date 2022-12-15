@@ -36,25 +36,26 @@ public class ConnectionHttpServerHttpClient {
             System.out.println(path);
             String[] query = queryStr.split("=");
             String data;
-            String dataType;
             String body="";
             try {
                 if(query.length>1) {
                     data = query[1];
                     var digest= CryptoUtils.hash(data.getBytes());
                     var hashData =digest.getHash();
+                    var enc=Base64.getEncoder();
+
                     body="";
-                    String hash = new String(hashData);
+                    String hash = enc.encodeToString(hashData);
                     if(Boolean.parseBoolean(properties.getProperty("hash.salt"))){
-                        String salt =new String(digest.getSalt());
+                        String salt =enc.encodeToString(digest.getSalt());
                         body="<!DOCTYPE html>\n" +
                                 "<html>\n" +
                                 "<body>\n" +
                                 "\n" +
                                 "<h1>Data To Hash</h1>\n" +
-                                "<p>"+"Hash Byte Array Inside A String: "+hash+"</p>\n" +
+                                "<p>"+"Hash Byte Array As A String In Base64: "+hash+"</p>\n" +
                                 "<p>"+"Algorithm: "+properties.getProperty("hash.algorithm")+"</p>\n" +
-                                "<p>"+"Salt Byte Array Inside A String: "+salt+"</p>\n" +
+                                "<p>"+"Salt Byte Array As A String In Base64: "+salt+"</p>\n" +
                                 "\n" +
                                 "</body>\n" +
                                 "</html>";
@@ -64,7 +65,7 @@ public class ConnectionHttpServerHttpClient {
                                 "<body>\n" +
                                 "\n" +
                                 "<h1>Data To Hash</h1>\n" +
-                                "<p>"+"Hash Byte Array Inside A String: "+hash+"</p>\n" +
+                                "<p>"+"Hash Byte Array As A String In Base64: "+hash+"</p>\n" +
                                 "<p>"+"Algorithm: "+properties.getProperty("hash.algorithm")+"</p>\n" +
                                 "\n" +
                                 "</body>\n" +

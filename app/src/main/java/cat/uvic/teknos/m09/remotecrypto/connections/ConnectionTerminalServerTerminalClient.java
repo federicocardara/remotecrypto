@@ -36,18 +36,21 @@ public class ConnectionTerminalServerTerminalClient {
             String data;
             Thread.sleep(50);
             data = input.readLine();
+            var enc=Base64.getEncoder();
             while (!dataIsEmpty) {
                 if (!data.equals("")) {
                    var digest= CryptoUtils.hash(data.getBytes());
-                    output.println("Hash Byte Array Inside A String: " + new String(digest.getHash()));
+                   var hash=enc.encodeToString(digest.getHash());
+                    output.println("Hash Byte Array As A String In Base64: " +hash);
                     output.flush();
                     output.println("Algorithm : " + properties.getProperty("hash.algorithm"));
                     output.flush();
                     if(Boolean.parseBoolean(properties.getProperty("hash.salt"))){
-                        output.println("Salt Byte Array Inside A String: " + new String(digest.getSalt()));
+                        var salt=enc.encodeToString(digest.getSalt());
+                        output.println("Salt Byte Array As A String In Base64: " + salt);
                         output.flush();
                     }
-                    
+
                     output.println("Enter the string that you wish to get the hash from: ");
                     output.flush();
                     data = input.readLine();
