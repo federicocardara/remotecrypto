@@ -1,6 +1,7 @@
 package cat.uvic.teknos.m09.remotecrypto.connections;
 
 import cat.uvic.teknos.m09.polsane.cryptoutils.CryptoUtils;
+import cat.uvic.teknos.m09.remotecrypto.exceptions.RemoteCryptoHttpException;
 import rawhttp.core.RawHttp;
 import rawhttp.core.RawHttpRequest;
 
@@ -19,9 +20,11 @@ public class ConnectionHttpServerHttpClient {
         http = new RawHttp();
         properties=new Properties();
         try {
-            properties.load(ConnectionHttpServerHttpClient.class.getResourceAsStream("/cryptoutils.properties"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            synchronized (ConnectionHttpServerHttpClient.class.getResourceAsStream("/cryptoutils.properties")) {
+                properties.load(ConnectionHttpServerHttpClient.class.getResourceAsStream("/cryptoutils.properties"));
+            }
+            } catch (IOException e) {
+            throw new RemoteCryptoHttpException(e);
         }
     }
 
@@ -101,7 +104,7 @@ public class ConnectionHttpServerHttpClient {
                     }
                 }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new RemoteCryptoHttpException(e);
             }
         } catch (IOException e) {
             e.printStackTrace();
