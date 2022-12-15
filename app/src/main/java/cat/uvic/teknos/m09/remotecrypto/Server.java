@@ -3,33 +3,24 @@
  */
 package cat.uvic.teknos.m09.remotecrypto;
 
-import java.io.*;
-import java.net.ServerSocket;
-import java.util.Base64;
+import cat.uvic.teknos.m09.remotecrypto.servers.ServerHttp;
+import cat.uvic.teknos.m09.remotecrypto.servers.ServerTelnet;
 
-public class Server {
+public class Server{
+    private static ServerHttp http;
+    private static ServerTelnet telnet;
 
-    public static final int PORT = 50001;
-
-    public static void main(String[] args) throws IOException {
-        var server = new ServerSocket(PORT);
-        System.out.println("Server listening on port " + server.getLocalPort());
-
-        var client = server.accept();
-
-        var inputStream = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        var outputStream = new PrintWriter(client.getOutputStream());
-
-        var data = inputStream.readLine();
-
-        while (data !=""){
-            var encoder = Base64.getEncoder();
-            outputStream.println(encoder.encodeToString(data.getBytes()));
-            outputStream.flush();
-            data = inputStream.readLine();
+    public static void main(String ...args){
+        try{
+            http = new ServerHttp();
+            telnet = new ServerTelnet();
+        }catch(Exception e){
+            e.printStackTrace();
         }
+    }
 
-
-        client.close();
+    public static void join(){
+        http.join();
+        telnet.join();
     }
 }
