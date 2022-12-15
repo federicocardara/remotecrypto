@@ -1,6 +1,6 @@
-package cat.uvic.teknos.m09.remotecrypto.runnable;
+package cat.uvic.teknos.m09.remotecrypto.connections;
 
-import cat.uvic.teknos.m09.remotecrypto.exceptions.RemoteCryptoException;
+import cat.uvic.teknos.m09.remotecrypto.exceptions.RemoteCryptoTerminalException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,11 +9,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Base64;
 
-public class ConnectionServerClient  {
+public class ConnectionTerminalServerTerminalClient {
     private Socket clientSocket;
     private  boolean dataIsEmpty =false;
 
-    public ConnectionServerClient(Socket clientSocket) {
+    public ConnectionTerminalServerTerminalClient(Socket clientSocket) {
         this.clientSocket =clientSocket;
     }
 
@@ -44,10 +44,9 @@ public class ConnectionServerClient  {
             Thread.sleep(10); //DO NOT DELETE
             clientSocket.close();
         } catch (IOException e) {
-            throw new RemoteCryptoException("An exception occurred while closing the socket: "+clientSocket.toString(),e);
+            throw new RemoteCryptoTerminalException("An exception occurred while closing the socket: "+clientSocket.toString(),e);
         } catch (InterruptedException e) {
-            throw new RemoteCryptoException("An exception occurred while trying to make thread "+Thread.currentThread().getName()+" sleep for 10 milliseconds",e);
+            throw new RemoteCryptoTerminalException("An exception occurred while trying to make thread "+Thread.currentThread().getName()+" sleep for 10 milliseconds",e);
         }
     }
 }
-

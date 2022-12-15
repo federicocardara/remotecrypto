@@ -35,7 +35,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'cat.uvic.teknos.m09.remotecrypto.App'
+    mainClass = 'cat.uvic.teknos.m09.remotecrypto2.App'
 }
 
 tasks.named('test') {
