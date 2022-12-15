@@ -9,10 +9,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 
 public class ServerTelnetThread implements Runnable{
-
     private Socket client;
 
     public ServerTelnetThread(Socket client){ //this Thread receives the client Socket
