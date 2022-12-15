@@ -11,16 +11,16 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Properties;
 
-public class FTPThread {
+public class FTPConnection {
     static CryptoUtils cryptoUtils=new CryptoUtils();
     private boolean stop = false;
     private Thread thread;
-    public  void FTPConnection() {
+    public FTPConnection() {
         try{
             this.thread = new Thread(() -> {
                 try {
                     Properties properties=new Properties();
-                    properties.load(FTPThread.class.getResourceAsStream("/ftp.properties"));
+                    properties.load(FTPConnection.class.getResourceAsStream("/ftp.properties"));
                     var timeApp=String.valueOf(properties.get("ftp.time"));
                     LocalDateTime time;
                     SimpleDateFormat formatter = new SimpleDateFormat("hh:mm");
@@ -50,7 +50,7 @@ public class FTPThread {
     private void run() throws IOException, MissingPropertiesException, NoSuchAlgorithmException {
         FTPClient client= new FTPClient();
         Properties properties=new Properties();
-        properties.load(FTPThread.class.getResourceAsStream("/ftp.properties"));
+        properties.load(FTPConnection.class.getResourceAsStream("/ftp.properties"));
         var url=String.valueOf(properties.get("ftp.hosturl"));
         var port=Integer.parseInt(String.valueOf(properties.get("ftp.hostport")));
         var username=String.valueOf(properties.get("ftp.username"));
@@ -77,6 +77,7 @@ public class FTPThread {
                 }
                 ByteArrayInputStream data = new ByteArrayInputStream((encrypted.getHash()+"\n"+encrypted.getAlgorithm()+"\n"+encrypted.getSalt()).getBytes());
                 client.storeFile(name, data);
+
             }
         }
         client.logout();
