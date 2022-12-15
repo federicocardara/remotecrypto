@@ -5,7 +5,7 @@ package cat.uvic.teknos.m09.remotecrypto;
 
 import cat.uvic.teknos.m09.remotecrypto.runnable.ConnectionServerClient;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.ServerSocket;
 
 public class Server {
