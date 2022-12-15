@@ -1,4 +1,4 @@
-package cat.uvic.teknos.m09.remotecrypto.excetptions;
+package cat.uvic.teknos.m09.remotecrypto.exceptions;
 
 public class remoteCryptoException extends RuntimeException {
 

@@ -6,6 +6,5 @@ package cat.uvic.teknos.m09.remotecrypto;
 import org.junit.jupiter.api.Test;
 
 class ServerTest {
-    @Test void appHasAGreeting() {
-    }
+    
 }
