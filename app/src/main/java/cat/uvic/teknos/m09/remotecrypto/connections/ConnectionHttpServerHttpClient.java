@@ -7,16 +7,22 @@ import rawhttp.core.RawHttpRequest;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Base64;
+import java.util.Properties;
 
 public class ConnectionHttpServerHttpClient {
-    private final Base64.Encoder encoder;
+    private Properties properties;
     private Socket client;
     private RawHttp http;
 
     public ConnectionHttpServerHttpClient(Socket socket) {
         this.client = socket;
         http = new RawHttp();
-        encoder = Base64.getEncoder();
+        properties=new Properties();
+        try {
+            properties.load(ConnectionHttpServerHttpClient.class.getResourceAsStream("/cryptoutils.properties"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void processRequestResponse(){
@@ -25,16 +31,18 @@ public class ConnectionHttpServerHttpClient {
             String queryStr= request.getUri().getQuery();
             String[] query = queryStr.split("=");
             String data;
+            String dataType;
 
             try {
+                dataType=query[0];
                 data=query[1];
-                System.out.println("si");
 
 
-                var hashData = CryptoUtils.hash(data.getBytes()).getHash();
+                var digest= CryptoUtils.hash(data.getBytes());
+                var hashData =digest.getHash();
 
                 String hash = new String(hashData);
-
+                String salt =new String(digest.getSalt());
                 //System.out.println(takeHashUri(request));
 
 
@@ -43,8 +51,10 @@ public class ConnectionHttpServerHttpClient {
                         "<html>\n" +
                         "<body>\n" +
                         "\n" +
-                        "<h1>Text to Base64</h1>\n" +
-                        "<p>"+hash+"</p>\n" +
+                        "<h1>Data To Hash</h1>\n" +
+                        "<p>"+"Hash Byte Array In String: "+hash+"</p>\n" +
+                        "<p>"+"Algorithm: "+properties.getProperty("hash.algorithm")+"</p>\n" +
+                        "<p>"+"Salt Byte Array In String: "+salt+"</p>\n" +
                         "\n" +
                         "</body>\n" +
                         "</html>";
@@ -91,18 +101,5 @@ public class ConnectionHttpServerHttpClient {
         }
     }
 
-    private boolean takeHashUri(RawHttpRequest request) {
-        String s = request.getUri().toString();
-        var sa = s.split("/");
-
-        var hs = sa[3];
-
-        var h = hs.split("data");
-
-        if(h[0].equals("hash?"))
-            return true;
-        else
-            return false;
-    }
 
 }
