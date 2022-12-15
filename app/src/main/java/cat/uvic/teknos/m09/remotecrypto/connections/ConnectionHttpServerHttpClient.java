@@ -32,69 +32,73 @@ public class ConnectionHttpServerHttpClient {
             String[] query = queryStr.split("=");
             String data;
             String dataType;
-
+            String body="";
             try {
-                dataType=query[0];
-                data=query[1];
+                if(query.length>1) {
+                    data = query[1];
+                    var digest= CryptoUtils.hash(data.getBytes());
+                    var hashData =digest.getHash();
+                    body="";
+                    String hash = new String(hashData);
+                    if(Boolean.parseBoolean(properties.getProperty("hash.salt"))){
+                        String salt =new String(digest.getSalt());
+                        body="<!DOCTYPE html>\n" +
+                                "<html>\n" +
+                                "<body>\n" +
+                                "\n" +
+                                "<h1>Data To Hash</h1>\n" +
+                                "<p>"+"Hash Byte Array In String: "+hash+"</p>\n" +
+                                "<p>"+"Algorithm: "+properties.getProperty("hash.algorithm")+"</p>\n" +
+                                "<p>"+"Salt Byte Array In String: "+salt+"</p>\n" +
+                                "\n" +
+                                "</body>\n" +
+                                "</html>";
+                    }if(!Boolean.parseBoolean(properties.getProperty("hash.salt"))) {
+                        body="<!DOCTYPE html>\n" +
+                                "<html>\n" +
+                                "<body>\n" +
+                                "\n" +
+                                "<h1>Data To Hash</h1>\n" +
+                                "<p>"+"Hash Byte Array In String: "+hash+"</p>\n" +
+                                "<p>"+"Algorithm: "+properties.getProperty("hash.algorithm")+"</p>\n" +
+                                "\n" +
+                                "</body>\n" +
+                                "</html>";
+                    }
+                }
 
 
-                var digest= CryptoUtils.hash(data.getBytes());
-                var hashData =digest.getHash();
 
-                String hash = new String(hashData);
-                String salt =new String(digest.getSalt());
                 //System.out.println(takeHashUri(request));
 
 
 
-                String body="<!DOCTYPE html>\n" +
-                        "<html>\n" +
-                        "<body>\n" +
-                        "\n" +
-                        "<h1>Data To Hash</h1>\n" +
-                        "<p>"+"Hash Byte Array In String: "+hash+"</p>\n" +
-                        "<p>"+"Algorithm: "+properties.getProperty("hash.algorithm")+"</p>\n" +
-                        "<p>"+"Salt Byte Array In String: "+salt+"</p>\n" +
-                        "\n" +
-                        "</body>\n" +
-                        "</html>";
+
 
                 if(request.getMethod().equals("GET")) {
-                    if (!data.equals("")) {
+                    System.out.println(body);
+                    if (query.length==2 && query[0].equals("data")) {
                         http.parseResponse(
                                 "HTTP/1.1 200 OK\r\n" +
                                         "Content-Type: html\r\n" +
-                                        "Content-Length: " + body.length() + "\r\n" +
+                                        "Content-Length: " + (body.length()) + "\r\n" +
                                         "Server: localhost\r\n" +
                                         "\r\n" +
                                         body).writeTo(client.getOutputStream());
-                    } else {
+                    } if(query.length!=2 && query[0].equals("data")) {
+                        http.parseResponse("HTTP/1.1 400 Bad Request\n" +
+                                "Content-Type: text/plain\n" +
+                                "Content-Length: 0\n" +
+                                "\n").writeTo(client.getOutputStream());
+                    }if(!query[0].equals("data")){
                         http.parseResponse("HTTP/1.1 404 Not Found\n" +
                                 "Content-Type: text/plain\n" +
                                 "Content-Length: 0\n" +
                                 "\n").writeTo(client.getOutputStream());
                     }
-                }else {
-                    //idk
                 }
-            } catch (Exception e) {
-                String body="<!DOCTYPE html>\n" +
-                        "<html>\n" +
-                        "<body>\n" +
-                        "\n" +
-                        "<h1>Text to Base64</h1>\n" +
-                        "<p>"+"HELLOW WORLD"+"</p>\n" +
-                        "\n" +
-                        "</body>\n" +
-                        "</html>";
-
-                http.parseResponse(
-                        "HTTP/1.1 200 OK\r\n" +
-                                "Content-Type: html\r\n" +
-                                "Content-Length: " + body.length() + "\r\n" +
-                                "Server: localhost\r\n" +
-                                "\r\n" +
-                                body).writeTo(client.getOutputStream());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         } catch (IOException e) {
             e.printStackTrace();
