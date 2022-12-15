@@ -29,6 +29,8 @@ public class ConnectionHttpServerHttpClient {
         try {
             RawHttpRequest request = http.parseRequest(client.getInputStream());
             String queryStr= request.getUri().getQuery();
+            String path=request.getUri().getPath();
+            System.out.println(path);
             String[] query = queryStr.split("=");
             String data;
             String dataType;
@@ -77,7 +79,8 @@ public class ConnectionHttpServerHttpClient {
 
                 if(request.getMethod().equals("GET")) {
                     System.out.println(body);
-                    if (query.length==2 && query[0].equals("data")) {
+                    var bol=path.equals("/hash");
+                    if (query.length==2 && query[0].equals("data") && path.equals("/hash")) {
                         http.parseResponse(
                                 "HTTP/1.1 200 OK\r\n" +
                                         "Content-Type: html\r\n" +
@@ -85,12 +88,12 @@ public class ConnectionHttpServerHttpClient {
                                         "Server: localhost\r\n" +
                                         "\r\n" +
                                         body).writeTo(client.getOutputStream());
-                    } if(query.length!=2 && query[0].equals("data")) {
+                    } if(query.length!=2 && query[0].equals("data") && path.equals("/hash")) {
                         http.parseResponse("HTTP/1.1 400 Bad Request\n" +
                                 "Content-Type: text/plain\n" +
                                 "Content-Length: 0\n" +
                                 "\n").writeTo(client.getOutputStream());
-                    }if(!query[0].equals("data")){
+                    }if(query[0].equals("data") && !path.equals("/hash")){
                         http.parseResponse("HTTP/1.1 404 Not Found\n" +
                                 "Content-Type: text/plain\n" +
                                 "Content-Length: 0\n" +
