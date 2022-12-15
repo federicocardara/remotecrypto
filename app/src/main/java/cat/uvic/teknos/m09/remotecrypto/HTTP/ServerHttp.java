@@ -39,7 +39,7 @@ public class ServerHttp {
     }
 
 
-    public void join(){
+    public void joinThread(){
         try {
             serverThread.join();
 

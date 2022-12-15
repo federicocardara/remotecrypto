@@ -5,21 +5,27 @@ package cat.uvic.teknos.m09.remotecrypto.ConnectionsViaTelnet;
 
 import java.io.*;
 import java.net.ServerSocket;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ServerTelnet {
 
     public static final int PORT = 50001;
+    private ServerSocket server;
+    private static ExecutorService threadExecutor;
 
     public static void main(String[] args) throws IOException {
         var server = new ServerSocket(PORT);
 
-        var threadExecutor = Executors.newFixedThreadPool(2);
+        threadExecutor = Executors.newFixedThreadPool(2);
 
         while(true){
             var client = server.accept();
             var clientThread = new Client(client);
             threadExecutor.execute(clientThread);
         }
+    }
+    public void joinThread(){
+        threadExecutor.shutdown();
     }
 }
