@@ -3,7 +3,9 @@ package cat.uvic.teknos.m09.remotecrypto.servers.thread;
 import cat.uvic.teknos.m09.elbouzzaouiabdelkarim.cryptoutils.CryptoUtils;
 import cat.uvic.teknos.m09.elbouzzaouiabdelkarim.cryptoutils.Exceptions.MissingPropertiesException;
 import cat.uvic.teknos.m09.elbouzzaouiabdelkarim.cryptoutils.PropertiesImp;
+import cat.uvic.teknos.m09.elbouzzaouiabdelkarim.cryptoutils.dto.DigestResult;
 import cat.uvic.teknos.m09.remotecrypto.exceptions.ConnectionException;
+import cat.uvic.teknos.m09.remotecrypto.exceptions.FTPFileCreationException;
 import cat.uvic.teknos.m09.remotecrypto.exceptions.FTPFilesNotFound;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -24,25 +26,24 @@ public class FTPConnection extends PropertiesImp {
 
     public FTPConnection() {
         super(PROPERTIES_PATH);
-            this.thread = new Thread(() -> {
-                try {
-                    var timeApp = String.valueOf(this.props.get("time"));
-                    LocalDateTime time;
-                    SimpleDateFormat formatter = new SimpleDateFormat("hh:mm");
-                    while (!stop) {
-                        time = LocalDateTime.now();
-                        String strDate = formatter.format(time);
-                        if (timeApp.equals(strDate)) {
-                            run();
-                        }
-                    }
-                } catch (IOException | MissingPropertiesException | NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                }
-            });
     }
 
-    private void run() throws IOException, MissingPropertiesException, NoSuchAlgorithmException {
+    public void init(){
+        this.thread = new Thread(() -> {
+            var timeApp = String.valueOf(this.props.get("time"));
+            LocalDateTime time;
+            SimpleDateFormat formatter = new SimpleDateFormat("hh:mm");
+            while (!stop) {
+                time = LocalDateTime.now();
+                String strDate = formatter.format(time);
+                if (timeApp.equals(strDate)) {
+                    run();
+                }
+            }
+        });
+    }
+
+    private void run() {
         try {
             initConnection();
             var files = getFilesFromDirectory();
@@ -80,15 +81,24 @@ public class FTPConnection extends PropertiesImp {
                     if (index != -1) {
                         name = name.substring(0, index) + ".hash";
                     }
-                    ByteArrayInputStream data = new ByteArrayInputStream((encrypted.getHash() + "\n" + encrypted.getAlgorithm() + "\n" + encrypted.getSalt()).getBytes());
-                    client.storeFile(name, data);
+                    createFileBash(encrypted, name);
                 }
             }
-            ;
         } catch (MissingPropertiesException | NoSuchAlgorithmException e) {
             throw e;
         } catch (IOException e) {
             throw new ConnectionException();
+        } catch (FTPFileCreationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createFileBash(DigestResult encrypted, String name) throws FTPFileCreationException {
+        ByteArrayInputStream data = new ByteArrayInputStream((encrypted.getHash() + "\n" + encrypted.getAlgorithm() + "\n" + encrypted.getSalt()).getBytes());
+        try {
+            client.storeFile(name, data);
+        } catch (IOException e) {
+            throw new FTPFileCreationException();
         }
     }
 
