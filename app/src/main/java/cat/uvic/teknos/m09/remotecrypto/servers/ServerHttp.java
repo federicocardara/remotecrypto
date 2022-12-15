@@ -1,6 +1,6 @@
 package cat.uvic.teknos.m09.remotecrypto.servers;
 
-import cat.uvic.teknos.m09.remotecrypto.servers.threads.ServerHttpThread;
+import cat.uvic.teknos.m09.remotecrypto.servers.thread.ServerHttpThread;
 import rawhttp.core.RawHttp;
 
 import java.io.IOException;
@@ -19,9 +19,9 @@ public class ServerHttp {
     public ServerHttp() throws IOException {
         serverThread = new Thread(()->{
             try{
-                server = new ServerSocket(PORT);
-                System.out.println("Server Http Start...");
-                listener();
+            server = new ServerSocket(PORT);
+            System.out.println("Server Http Start...");
+            listener();
             }catch(Exception e){
                 e.printStackTrace();
             }

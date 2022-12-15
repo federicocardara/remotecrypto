@@ -16,5 +16,8 @@ public class ServerInit {
         }
     }
 
-
+    public static void join(){
+        http.join();
+        telnet.join();
+    }
 }

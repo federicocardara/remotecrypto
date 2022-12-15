@@ -12,12 +12,13 @@ plugins {
 }
 
 repositories {
-    // Use Maven Central for resolving dependencies.
-    maven{
-        allowInsecureProtocol=true
-        url='http://164.68.111.12:8081/nexus/content/repositories/maven-releases'
+    maven {
+        allowInsecureProtocol = true
+        url "http://164.68.111.12:8081/nexus/content/repositories/maven-releases"
     }
+    // Use Maven Central for resolving dependencies.
     mavenCentral()
+
 }
 
 dependencies {
@@ -26,10 +27,8 @@ dependencies {
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:31.0.1-jre'
-    implementation group: 'commons-net', name: 'commons-net', version: '3.8.0'
-    implementation 'cat.uvic.teknos.m09.matias:cryptoutils:1.0'
     implementation 'com.athaydes.rawhttp:rawhttp-core:2.5.0'
-
+    implementation 'cat.uvic.teknos.m09.elbouzzaouiabdelkarim:cryptoutils:1.2'
 }
 
 application {
