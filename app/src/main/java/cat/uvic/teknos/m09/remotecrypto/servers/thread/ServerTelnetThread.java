@@ -50,7 +50,7 @@ public class ServerTelnetThread implements Runnable{
         CryptoUtils cryptoUtils = new CryptoUtils();
         while (!data.equals("")){ //loop till client press enter key it repeats the process of reading and showing the text in base 64
             try {
-            String  str = cryptoUtils.hash(data.getBytes()).getHash().toString();
+            String  str = new String(cryptoUtils.hash(data.getBytes()).getHash());
                 outputStream.println(str);
             } catch (MissingPropertiesException e) {
                 throw new RuntimeException(e);
