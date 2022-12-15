@@ -1,18 +1,18 @@
-package cat.uvic.teknos.m09.remotecrypto;
+package cat.uvic.teknos.m09.remotecrypto.clients;
 
-import cat.uvic.teknos.m09.remotecrypto.exeptions.IncorrectDataException;
+import cat.uvic.teknos.m09.remotecrypto.exceptions.IncorrectDataException;
 import java.io.*;
 import java.net.Socket;
 import java.util.Base64;
 
-public class Client {
+public class TerminalClient {
 
     private Socket socket;
     private BufferedReader inputStream;
     private PrintWriter outputStream;
     private final Base64.Encoder encoder = Base64.getEncoder();
 
-    public Client(Socket socket, BufferedReader inputStream, PrintWriter outputStream) {
+    public TerminalClient(Socket socket, BufferedReader inputStream, PrintWriter outputStream) {
         this.socket = socket;
         this.inputStream = inputStream;
         this.outputStream = outputStream;

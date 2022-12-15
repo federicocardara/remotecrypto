@@ -1,4 +1,4 @@
-package cat.uvic.teknos.m09.remotecrypto.exeptions;
+package cat.uvic.teknos.m09.remotecrypto.exceptions;
 
 public class InputOutputStreamException extends RuntimeException{
     public void InputOutputStreamException() {
