@@ -35,7 +35,7 @@ public class FTPConnection extends PropertiesImp {
         this.thread = new Thread(() -> {
             var timeApp = String.valueOf(this.props.get("time"));
             Date time;
-            SimpleDateFormat formatter = new SimpleDateFormat("hh:mm");
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
             while (!stop) {
                 time = new Date();
                 String strDate = formatter.format(time);
