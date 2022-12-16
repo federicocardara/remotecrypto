@@ -18,7 +18,7 @@ public class TerminalServer {
         turnOnServerTerminal();
     }
 
-    private void turnOnServerTerminal() {
+    public void turnOnServerTerminal() {
         try {
             server = new ServerSocket(PORT);
         } catch (IOException e) {

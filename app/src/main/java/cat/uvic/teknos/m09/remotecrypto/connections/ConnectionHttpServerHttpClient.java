@@ -3,7 +3,6 @@ package cat.uvic.teknos.m09.remotecrypto.connections;
 import cat.uvic.teknos.m09.polsane.cryptoutils.CryptoUtils;
 import rawhttp.core.RawHttp;
 import rawhttp.core.RawHttpRequest;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.Base64;
@@ -12,6 +11,9 @@ public class ConnectionHttpServerHttpClient {
     private final Base64.Encoder encoder;
     private Socket client;
     private RawHttp http;
+    private String body = "";
+
+    private final String INCORRECT_URI = "INCORRECT URI TO GET HASH MESSAGE, Exemple: http://localhost:50002/hash?data=MESSAGE";
 
     public ConnectionHttpServerHttpClient(Socket socket) {
         this.client = socket;
@@ -28,21 +30,15 @@ public class ConnectionHttpServerHttpClient {
 
             try {
                 data=query[1];
-                System.out.println("si");
 
                 var hashData = CryptoUtils.hash(data.getBytes()).getHash();
 
-                String hash = new String(hashData);
+                var hash = new String(hashData);
 
-                String body="<!DOCTYPE html>\n" +
-                        "<html>\n" +
-                        "<body>\n" +
-                        "\n" +
-                        "<h1>Text to Base64</h1>\n" +
-                        "<p>"+hash+"</p>\n" +
-                        "\n" +
-                        "</body>\n" +
-                        "</html>";
+                if(takeHashUri(request) && !data.equals(null) && query[0].equals("data"))
+                    body = getHTML(String.valueOf(hash.getBytes()), true);
+                else
+                    body = getHTML("ERROR 404, EXEMPLE URI: Exemple: http://localhost:50002/hash?data=MESSAGE", false);
 
                 if(request.getMethod().equals("GET")) {
                     if (!data.equals("")) {
@@ -63,15 +59,7 @@ public class ConnectionHttpServerHttpClient {
                     //idk
                 }
             } catch (Exception e) {
-                String body="<!DOCTYPE html>\n" +
-                        "<html>\n" +
-                        "<body>\n" +
-                        "\n" +
-                        "<h1>Text to Base64</h1>\n" +
-                        "<p>"+"INCORRECT URI TO GET HASH MESSAGE"+"</p>\n" +
-                        "\n" +
-                        "</body>\n" +
-                        "</html>";
+                var body = getHTML("ERROR 400, EXEMPLE URI: Exemple: http://localhost:50002/hash?data=MESSAGE", false);
 
                 http.parseResponse(
                         "HTTP/1.1 200 OK\r\n" +
@@ -82,8 +70,34 @@ public class ConnectionHttpServerHttpClient {
                                 body).writeTo(client.getOutputStream());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            body = getHTML(INCORRECT_URI, false);
+            try {
+                http.parseResponse(
+                        "HTTP/1.1 200 OK\r\n" +
+                                "Content-Type: html\r\n" +
+                                "Content-Length: " + body.length() + "\r\n" +
+                                "Server: localhost\r\n" +
+                                "\r\n" +
+                                body).writeTo(client.getOutputStream());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
+    }
+
+    private String getHTML(String message, boolean b){
+        if(b)
+            message = encoder.encodeToString(message.getBytes());
+
+        String body="<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<body>\n" +
+                "\n" +
+                "<p>"+message+"</p>\n" +
+                "\n" +
+                "</body>\n" +
+                "</html>";
+        return body;
     }
 
     private boolean takeHashUri(RawHttpRequest request) {
