@@ -63,7 +63,7 @@ public class ServerUDPThread implements Runnable {
 
     public static byte[] getPacket2(byte[] mess){
         byte[] hash = new byte[mess.length-mess.length/2]; 
-        System.arraycopy(mess,mess.length-mess.length/2,mess.length/2,0,hash.length); 
+        System.arraycopy(mess,mess.length-mess.length/2,hash,0,hash.length);
         return hash;
     }
 }
