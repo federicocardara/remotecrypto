@@ -9,9 +9,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.net.Socket;
-
 class ServerTest {
     private static ServerHttpThread http;
     @BeforeAll
@@ -25,7 +22,7 @@ class ServerTest {
 
     @Test
     void successfullResponse() throws NotFoundException, InternalServerErrorException, BadRequestException, HttpException {
-        String response = http.controller("/cryptoutils/hash","text=ABC");
+        String response = http.controller("/cryptoutils/hash","text=ASD");
         Assertions.assertFalse(response.isEmpty());
     }
 
