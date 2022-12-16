@@ -109,6 +109,12 @@ public class ConnectionHttpServerHttpClient {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                client.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
