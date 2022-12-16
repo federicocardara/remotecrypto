@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Properties;
 
@@ -20,7 +21,9 @@ public class ConnectionTerminalServerTerminalClient {
         this.clientSocket =clientSocket;
         properties=new Properties();
         try {
-            properties.load(ConnectionTerminalServerTerminalClient.class.getResourceAsStream("/cryptoutils.properties"));
+            synchronized (ConnectionHttpServerHttpClient.class.getResourceAsStream("/cryptoutils.properties")) {
+                properties.load(ConnectionTerminalServerTerminalClient.class.getResourceAsStream("/cryptoutils.properties"));
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -39,8 +42,8 @@ public class ConnectionTerminalServerTerminalClient {
             var enc=Base64.getEncoder();
             while (!dataIsEmpty) {
                 if (!data.equals("")) {
-                   var digest= CryptoUtils.hash(data.getBytes());
-                   var hash=enc.encodeToString(digest.getHash());
+                    var digest= CryptoUtils.hash(data.getBytes());
+                    var hash=enc.encodeToString(digest.getHash());
                     output.println("Hash Byte Array As A String In Base64: " +hash);
                     output.flush();
                     output.println("Algorithm : " + properties.getProperty("hash.algorithm"));
