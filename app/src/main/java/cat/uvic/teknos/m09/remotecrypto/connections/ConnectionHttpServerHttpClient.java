@@ -13,7 +13,7 @@ public class ConnectionHttpServerHttpClient {
     private RawHttp http;
     private String body = "";
 
-    private final String INCORRECT_URI = "INCORRECT URI TO GET HASH MESSAGE, Exemple: http://localhost:50002/hash?data=MESSAGE";
+    private final String EXEMPLE_URI = "http://localhost:50002/hash?data=MESSAGE";
 
     public ConnectionHttpServerHttpClient(Socket socket) {
         this.client = socket;
@@ -23,10 +23,10 @@ public class ConnectionHttpServerHttpClient {
 
     public void processRequestResponse(){
         try {
-            RawHttpRequest request = http.parseRequest(client.getInputStream());
-            String queryStr= request.getUri().getQuery();
+            var request = http.parseRequest(client.getInputStream());
+            var queryStr= request.getUri().getQuery();
             String[] query = queryStr.split("=");
-            String data;
+            var data = "";
 
             try {
                 data=query[1];
@@ -38,7 +38,7 @@ public class ConnectionHttpServerHttpClient {
                 if(takeHashUri(request) && !data.equals(null) && query[0].equals("data"))
                     body = getHTML(String.valueOf(hash.getBytes()), true);
                 else
-                    body = getHTML("ERROR 404, EXEMPLE URI: Exemple: http://localhost:50002/hash?data=MESSAGE", false);
+                    body = getHTML("ERROR 404, EXEMPLE URI: Exemple: " + EXEMPLE_URI, false);
 
                 if(request.getMethod().equals("GET")) {
                     if (!data.equals("")) {
@@ -55,11 +55,9 @@ public class ConnectionHttpServerHttpClient {
                                 "Content-Length: 0\n" +
                                 "\n").writeTo(client.getOutputStream());
                     }
-                }else {
-                    //idk
                 }
             } catch (Exception e) {
-                var body = getHTML("ERROR 400, EXEMPLE URI: Exemple: http://localhost:50002/hash?data=MESSAGE", false);
+                var body = getHTML("ERROR 400, EXEMPLE URI: Exemple: " + EXEMPLE_URI, false);
 
                 http.parseResponse(
                         "HTTP/1.1 200 OK\r\n" +
@@ -70,7 +68,7 @@ public class ConnectionHttpServerHttpClient {
                                 body).writeTo(client.getOutputStream());
             }
         } catch (IOException e) {
-            body = getHTML(INCORRECT_URI, false);
+            body = getHTML("INCORRECT URI TO GET HASH MESSAGE, Exemple: " + EXEMPLE_URI, false);
             try {
                 http.parseResponse(
                         "HTTP/1.1 200 OK\r\n" +
@@ -92,7 +90,7 @@ public class ConnectionHttpServerHttpClient {
         String body="<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<body>\n" +
-                "\n" +
+                "\n" + "<h1>Encrypted Message</h1>" +
                 "<p>"+message+"</p>\n" +
                 "\n" +
                 "</body>\n" +
@@ -113,5 +111,4 @@ public class ConnectionHttpServerHttpClient {
         else
             return false;
     }
-
 }

@@ -1,5 +1,6 @@
 package cat.uvic.teknos.m09.remotecrypto.clients;
 
+import cat.uvic.teknos.m09.polsane.cryptoutils.CryptoUtils;
 import cat.uvic.teknos.m09.remotecrypto.exceptions.IncorrectDataException;
 import java.io.*;
 import java.net.Socket;
