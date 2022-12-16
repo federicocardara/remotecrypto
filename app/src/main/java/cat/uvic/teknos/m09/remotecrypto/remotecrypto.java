@@ -4,7 +4,7 @@ import cat.uvic.teknos.m09.remotecrypto.Client.ClientFTP;
 import cat.uvic.teknos.m09.remotecrypto.servers.ServerHttp;
 import cat.uvic.teknos.m09.remotecrypto.servers.ServerTelnet;
 
-public class MainActivity {
+public class remotecrypto {
     private static ServerHttp http;
     private static ServerTelnet telnet;
     private static ClientFTP ftpClient;
