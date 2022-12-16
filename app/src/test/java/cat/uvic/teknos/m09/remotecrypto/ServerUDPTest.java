@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Stream;
 
+import com.google.common.io.ByteArrayDataInput;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -15,16 +16,15 @@ import cat.uvic.teknos.m09.remotecrypto.threads.ServerUDPThread;
 public class ServerUDPTest {
 
     @Test
-    void UDPPacketsCorrect(){
-        byte[] arr1,arr2,res;
+    void partitionMessageSuccess(){
+        byte[] arr1,arr2;
         String msg = "hola";
         arr1 = ServerUDPThread.getPacket1(msg.getBytes());
         arr2 = ServerUDPThread.getPacket2(msg.getBytes());
-        res = {arr1,arr2};
 
-        Assertions.assertEquals(msg, msg);
+        String res = (new String(arr1)+new String(arr2));
+        Assertions.assertEquals(msg, res);
 
-        Assertions.assertThrows(NotFoundException.class,()->http.controller("randompath",""));
     }
     
 }
