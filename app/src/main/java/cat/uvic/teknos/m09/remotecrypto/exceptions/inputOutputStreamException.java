@@ -5,3 +5,4 @@ public class inputOutputStreamException {
         System.out.println("ERROR: CAN'T CREATE INPUT/OUTPUT STREAM");
     }
 }
+

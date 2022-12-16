@@ -20,11 +20,11 @@ public class Client {
     public void clientConecction(){
         var exit = true;
 
-        while(exit) { // while per enter per multiples textos
+        while(exit) { // while for enter text multiples times
 
             String data;
             try {
-                data = inputStream.readLine(); // conseguint datos del client
+                data = inputStream.readLine(); // get data from client
 
                 if(data.equals("")) {
                     exit = !exit;

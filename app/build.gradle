@@ -20,15 +20,19 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.athaydes.rawhttp:rawhttp-core:2.5.0'
+
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:31.0.1-jre'
-
-    // rawHTTP and polCryptoUtils
     implementation 'com.athaydes.rawhttp:rawhttp-core:2.5.0'
     implementation 'cat.uvic.teknos.m09.polsane:cryptoutils:1.2'
+
+
+
+
 }
 
 application {
