@@ -30,14 +30,9 @@ public class ConnectionHttpServerHttpClient {
                 data=query[1];
                 System.out.println("si");
 
-
                 var hashData = CryptoUtils.hash(data.getBytes()).getHash();
 
                 String hash = new String(hashData);
-
-                //System.out.println(takeHashUri(request));
-
-
 
                 String body="<!DOCTYPE html>\n" +
                         "<html>\n" +
