@@ -33,7 +33,6 @@ public class ConnectionHttpServerHttpClient {
             RawHttpRequest request = http.parseRequest(client.getInputStream());
             String queryStr= request.getUri().getQuery();
             String path=request.getUri().getPath();
-            System.out.println(path);
             String[] query = queryStr.split("=");
             String data;
             String body="";
@@ -72,17 +71,7 @@ public class ConnectionHttpServerHttpClient {
                                 "</html>";
                     }
                 }
-
-
-
-                //System.out.println(takeHashUri(request));
-
-
-
-
-
                 if(request.getMethod().equals("GET")) {
-                    System.out.println(body);
                     var bol=path.equals("/hash");
                     if (query.length==2 && query[0].equals("data") && path.equals("/hash")) {
                         http.parseResponse(
