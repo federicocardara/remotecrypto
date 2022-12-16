@@ -3,6 +3,7 @@ package cat.uvic.teknos.m09.remotecrypto;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Stream;
@@ -22,9 +23,8 @@ public class ServerUDPTest {
         arr1 = ServerUDPThread.getPacket1(msg.getBytes());
         arr2 = ServerUDPThread.getPacket2(msg.getBytes());
 
-        String res = (new String(arr1)+new String(arr2));
+        var res = (new String(arr1, StandardCharsets.UTF_8)+new String(arr2,StandardCharsets.UTF_8));
         Assertions.assertEquals(msg, res);
-
     }
     
 }
