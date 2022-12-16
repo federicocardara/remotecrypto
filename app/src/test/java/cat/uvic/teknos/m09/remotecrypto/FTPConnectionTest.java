@@ -2,7 +2,9 @@ package cat.uvic.teknos.m09.remotecrypto;
 
 import java.io.ByteArrayInputStream;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
+import cat.uvic.teknos.m09.remotecrypto.exceptions.FTPFileCreationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +24,7 @@ public class FTPConnectionTest {
         ByteArrayInputStream a = con.createContentFile(dg);
 
         var res = new ByteArrayInputStream((new String(dg.getHash()) + "\n" + dg.getAlgorithm() + "\n" + new String(dg.getSalt())).getBytes());
-        Assertions.assertEquals(res,a);
+        Assertions.assertTrue(Arrays.equals(res.readAllBytes(),a.readAllBytes()));
     }
     
 }
