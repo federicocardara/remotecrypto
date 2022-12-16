@@ -9,6 +9,10 @@ public class ServerInit {
     private static ServerTelnet telnet;
     private static FTPConnection ftpConnection;
 
+    
+    /** 
+     * @param ...args
+     */
     public static void main(String ...args){
         try{
             http = new ServerHttp();

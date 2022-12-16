@@ -27,7 +27,9 @@ public class FTPConnection extends PropertiesImp {
     public FTPConnection() {
         super(PROPERTIES_PATH);
     }
-
+    /**
+     * Initialize thread for in time of ftp.properties declared, create .hash files from from files in ftp directory
+     */
     public void init(){
         this.thread = new Thread(() -> {
             var timeApp = String.valueOf(this.props.get("time"));
@@ -54,6 +56,10 @@ public class FTPConnection extends PropertiesImp {
         }
     }
 
+    
+    /** 
+     * @throws ConnectException
+     */
     private void initConnection() throws ConnectException {
         try {
             var url = String.valueOf(this.props.get("ftp_url"));
@@ -69,6 +75,13 @@ public class FTPConnection extends PropertiesImp {
         }
     }
 
+    
+    /** 
+     * @param files
+     * @throws MissingPropertiesException
+     * @throws ConnectionException
+     * @throws NoSuchAlgorithmException
+     */
     private void generateHash(FTPFile[] files) throws MissingPropertiesException, ConnectionException, NoSuchAlgorithmException {
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -93,6 +106,12 @@ public class FTPConnection extends PropertiesImp {
         }
     }
 
+    
+    /** 
+     * @param encrypted
+     * @param name
+     * @throws FTPFileCreationException
+     */
     private void createFileBash(DigestResult encrypted, String name) throws FTPFileCreationException {
         ByteArrayInputStream data = new ByteArrayInputStream((encrypted.getHash() + "\n" + encrypted.getAlgorithm() + "\n" + encrypted.getSalt()).getBytes());
         try {
@@ -102,6 +121,11 @@ public class FTPConnection extends PropertiesImp {
         }
     }
 
+    
+    /** 
+     * @return FTPFile[]
+     * @throws FTPFilesNotFound
+     */
     private FTPFile[] getFilesFromDirectory() throws FTPFilesNotFound {
         try {
             var folder = String.valueOf(this.props.get("folder"));
@@ -112,10 +136,17 @@ public class FTPConnection extends PropertiesImp {
         }
     }
 
+    /**
+     * stop the loop of  thread to stop it
+     */
     public void stop() {
         this.stop = true;
     }
 
+    
+    /** 
+     * @throws InterruptedException
+     */
     public void join() throws InterruptedException {
         this.thread.join();
     }

@@ -27,6 +27,10 @@ public class ServerTelnet  {
 
         threadServer.start();
     }
+    
+    /** 
+     * @throws IOException
+     */
     private void listener() throws IOException {
         threadExecutor  = Executors.newFixedThreadPool(3); // Up to 3 clients at the same time
         while(true){

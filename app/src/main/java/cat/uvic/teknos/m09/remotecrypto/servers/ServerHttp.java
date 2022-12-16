@@ -21,7 +21,7 @@ public class ServerHttp {
             try{
             server = new ServerSocket(PORT);
             System.out.println("Server Http Start...");
-            listener();
+            run();
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -30,7 +30,12 @@ public class ServerHttp {
         serverThread.start();
     }
 
-    private void listener() throws IOException {
+    
+    /** 
+     * Initialize ThreadPool executor for listener
+     * @throws IOException
+     */
+    private void run() throws IOException {
         pool = Executors.newFixedThreadPool(10);
         while(true){
             System.out.println("waiting for client...");

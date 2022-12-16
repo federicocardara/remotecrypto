@@ -24,6 +24,10 @@ public class ServerHttpThread implements Runnable {
     public ServerHttpThread(){
     }
 
+    
+    /** 
+     * @param client
+     */
     public void setClient(Socket client) {
         this.client = client;
     }
@@ -48,6 +52,10 @@ public class ServerHttpThread implements Runnable {
         sendResponse(response);
     }
 
+    
+    /** 
+     * @param response
+     */
     private void sendResponse(String response) {
         try{
             http.parseResponse(response).writeTo(client.getOutputStream());
@@ -56,6 +64,10 @@ public class ServerHttpThread implements Runnable {
         }
     }
 
+    
+    /** 
+     * @throws ConnectionException
+     */
     public void initConnection() throws ConnectionException {
         try {
             request = http.parseRequest(client.getInputStream());
@@ -64,6 +76,17 @@ public class ServerHttpThread implements Runnable {
         }
     }
 
+    
+    /** 
+     * method to control path of request and returns response http as string
+     * @param path request url
+     * @param query parameters in url
+     * @return String
+     * @throws NotFoundException
+     * @throws HttpException
+     * @throws InternalServerErrorException
+     * @throws BadRequestException
+     */
     public String controller(String path, String query) throws NotFoundException, HttpException, InternalServerErrorException, BadRequestException {
         try {
             if (path.contains("/cryptoutils/hash")) {
@@ -71,7 +94,9 @@ public class ServerHttpThread implements Runnable {
                     throw new BadRequestException();
                 }
                 DigestResult digest = cryptoUtils.hash(query.split("=")[1].getBytes());
-                String str = new String(digest.getHash());
+                String str = "{\"hash:\""+new String(digest.getHash())+"\n";
+                str+="\"algorithm:\""+digest.getAlgorithm()+"\n";
+                str+="\"salt:\""+digest.getSalt()+"\n}";
                 return str;
             } else {
                 throw new NotFoundException();
@@ -85,6 +110,10 @@ public class ServerHttpThread implements Runnable {
         }
     }
 
+    
+    /**
+     * @return String
+     */
     private String sendInternalServerErrorResponse() {
         return "HTTP/1.1 500 Internal Server Error\n" +
                 "Content-Type: text/plain\n" +
@@ -92,6 +121,10 @@ public class ServerHttpThread implements Runnable {
                 "\n";
     }
 
+    
+    /** 
+     * @return String
+     */
     private String sendNotFoundResponse() {
         return "HTTP/1.1 404 Not Found\n" +
                 "Content-Type: text/plain\n" +
@@ -99,14 +132,23 @@ public class ServerHttpThread implements Runnable {
                 "\n";
     }
 
+    
+    /** 
+     * @param str
+     * @return String
+     */
     private String sendSuccessResponse(String str) {
         return "HTTP/1.1 200 OK\n" +
-                "Content-Type: text/plain\n" +
+                "Content-Type: application/json\n" +
                 "Content-Length: " + str.length() + "\n" +
                 "\n" +
                 "str";
     }
 
+    
+    /** 
+     * @return String
+     */
     private String sendBadRequestResponse(){
         return "HTTP/1.1 400 Bad Request\n" +
                     "Content-Type: text/plain\n" +

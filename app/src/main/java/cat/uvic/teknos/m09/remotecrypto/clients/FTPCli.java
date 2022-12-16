@@ -10,6 +10,10 @@ import java.security.NoSuchAlgorithmException;
 
 public class FTPCli {
         static CryptoUtils cr = new CryptoUtils();
+    
+    /** 
+     * @param args
+     */
     public static void main(String[] args) {
         try{
             run();
@@ -18,6 +22,13 @@ public class FTPCli {
         }
     }
 
+    
+    /** 
+     * 
+     * @throws IOException
+     * @throws MissingPropertiesException
+     * @throws NoSuchAlgorithmException
+     */
     private static void run() throws IOException, MissingPropertiesException, NoSuchAlgorithmException {
         var ftpClient = new FTPClient();
         ftpClient.connect("localhost");
