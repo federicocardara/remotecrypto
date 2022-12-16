@@ -50,6 +50,7 @@ public class ServerHttpThread implements Runnable {
            response = sendBadRequestResponse();
         }
         sendResponse(response);
+
     }
 
     
@@ -59,6 +60,7 @@ public class ServerHttpThread implements Runnable {
     private void sendResponse(String response) {
         try{
             http.parseResponse(response).writeTo(client.getOutputStream());
+            client.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -95,9 +97,9 @@ public class ServerHttpThread implements Runnable {
                     throw new BadRequestException();
                 }
                 DigestResult digest = cryptoUtils.hash(query.split("=")[1].getBytes());
-                String str = "{\"hash:\""+new String(digest.getHash())+"\n";
-                str+="\"algorithm:\""+digest.getAlgorithm()+"\n";
-                str+="\"salt:\""+digest.getSalt()+"\n}";
+                String str = "{\"hash\":\""+new String(digest.getHash())+"\",\n";
+                str+="\"algorithm\":\""+digest.getAlgorithm()+"\",\n";
+                str+="\"salt\":\""+digest.getSalt()+"\",\n}";
                 return str;
             } else {
                 throw new NotFoundException();
@@ -143,7 +145,7 @@ public class ServerHttpThread implements Runnable {
                 "Content-Type: application/json\n" +
                 "Content-Length: " + str.length() + "\n" +
                 "\n" +
-                "str";
+                str;
     }
 
     
