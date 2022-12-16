@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ServerTest {
     @Test void turnOnHttpServer(){
-        HttpServer httpServer=new HttpServer(50002);
+        HttpServer httpServer=new HttpServer();
         httpServer.turnOnServer();
     }
     @Test void crypto(){

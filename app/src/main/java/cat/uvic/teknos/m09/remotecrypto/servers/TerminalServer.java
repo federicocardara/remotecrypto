@@ -14,8 +14,11 @@ public class TerminalServer {
     private static PrintWriter outputStream;
     private static Socket client;
 
-    public static void main(String[] args){
+    public TerminalServer(){
+        turnOnServerTerminal();
+    }
 
+    private void turnOnServerTerminal() {
         try {
             server = new ServerSocket(PORT);
         } catch (IOException e) {
