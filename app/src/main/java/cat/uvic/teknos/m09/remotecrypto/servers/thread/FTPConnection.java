@@ -41,6 +41,7 @@ public class FTPConnection {
                     throw new RuntimeException(e);
                 }
             });
+            this.thread.start();
 
         }catch(Exception e){
             e.printStackTrace();
