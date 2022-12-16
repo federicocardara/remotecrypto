@@ -6,7 +6,6 @@ import java.net.Socket;
 import java.util.Base64;
 
 public class Client {
-
     private Socket socket;
     private BufferedReader inputStream;
     private PrintWriter outputStream;
