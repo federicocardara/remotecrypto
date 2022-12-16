@@ -10,6 +10,7 @@ import rawhttp.core.RawHttpRequest;
 import java.io.IOException;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 public class ServerHttpThread implements Runnable {
     CryptoUtils cryptoUtils = new CryptoUtils();
@@ -97,9 +98,9 @@ public class ServerHttpThread implements Runnable {
                     throw new BadRequestException();
                 }
                 DigestResult digest = cryptoUtils.hash(query.split("=")[1].getBytes());
-                String str = "{\"hash\":\""+new String(digest.getHash())+"\",\n";
+                String str = "{\"hash\":"+ Arrays.toString(digest.getHash())+",\n";
                 str+="\"algorithm\":\""+digest.getAlgorithm()+"\",\n";
-                str+="\"salt\":\""+digest.getSalt()+"\",\n}";
+                str+="\"salt\":"+Arrays.toString(digest.getSalt())+",\n}";
                 return str;
             } else {
                 throw new NotFoundException();
