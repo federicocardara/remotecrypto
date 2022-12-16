@@ -41,4 +41,13 @@ public class ServerUDP {
             pool.execute(new ServerUDPThread(server,packet));
         }
     }
+
+    public void join(){
+        try {
+            pool.shutdown();
+            serverThread.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

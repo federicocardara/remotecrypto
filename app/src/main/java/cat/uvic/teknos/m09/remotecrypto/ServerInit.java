@@ -2,12 +2,14 @@ package cat.uvic.teknos.m09.remotecrypto;
 
 import cat.uvic.teknos.m09.remotecrypto.servers.ServerHttp;
 import cat.uvic.teknos.m09.remotecrypto.servers.ServerTelnet;
+import cat.uvic.teknos.m09.remotecrypto.servers.ServerUDP;
 import cat.uvic.teknos.m09.remotecrypto.servers.thread.FTPConnection;
 
 public class ServerInit {
     private static ServerHttp http;
     private static ServerTelnet telnet;
     private static FTPConnection ftpConnection;
+    private static ServerUDP udp;
 
     
     /** 
@@ -17,6 +19,7 @@ public class ServerInit {
         try{
             http = new ServerHttp();
             telnet = new ServerTelnet();
+            udp = new ServerUDP();
             ftpConnection = new FTPConnection();
             ftpConnection.init();
         }catch(Exception e){
@@ -27,5 +30,6 @@ public class ServerInit {
     public static void join(){
         http.join();
         telnet.join();
+        udp.join();
     }
 }
