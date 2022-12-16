@@ -29,7 +29,9 @@ dependencies {
     implementation 'com.google.guava:guava:31.0.1-jre'
     implementation 'com.athaydes.rawhttp:rawhttp-core:2.5.0'
     implementation 'cat.uvic.teknos.m09.elbouzzaouiabdelkarim:cryptoutils:1.2'
+    implementation 'cat.uvic.teknos.m09.matias:cryptoutils:1.0'
     implementation group: 'commons-net', name: 'commons-net', version: '3.8.0'
+
 
 }
 

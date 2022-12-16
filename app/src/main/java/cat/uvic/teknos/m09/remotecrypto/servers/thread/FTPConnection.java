@@ -9,6 +9,7 @@ import java.io.*;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Properties;
 
 public class FTPConnection {
@@ -22,10 +23,10 @@ public class FTPConnection {
                     Properties properties=new Properties();
                     properties.load(FTPConnection.class.getResourceAsStream("/ftp.properties"));
                     var timeApp=String.valueOf(properties.get("ftp.time"));
-                    LocalDateTime time;
-                    SimpleDateFormat formatter = new SimpleDateFormat("hh:mm");
+                    Date time;
+                    SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
                     while(!stop){
-                        time= LocalDateTime.now();
+                        time= new Date();
                         String strDate=formatter.format(time);
                         if(timeApp.equals(strDate)){
                             run();

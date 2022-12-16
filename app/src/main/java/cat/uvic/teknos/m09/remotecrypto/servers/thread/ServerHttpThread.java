@@ -101,10 +101,10 @@ public class ServerHttpThread implements Runnable {
 
     private String sendSuccessResponse(String str) {
         return "HTTP/1.1 200 OK\n" +
-                "Content-Type: text/plain\n" +
+                "Content-Type: application/json\n" +
                 "Content-Length: " + str.length() + "\n" +
                 "\n" +
-                "str";
+                str;
     }
 
     private String sendBadRequestResponse(){

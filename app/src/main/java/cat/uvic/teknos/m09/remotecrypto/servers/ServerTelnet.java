@@ -14,7 +14,7 @@ public class ServerTelnet  {
     private ServerSocket server;
     public Thread threadServer;
     private ExecutorService threadExecutor;
-    public ServerTelnet() throws IOException {
+    public ServerTelnet()  {
         threadServer =  new Thread(()->{
             try{
                 server = new ServerSocket(PORT);
@@ -39,7 +39,6 @@ public class ServerTelnet  {
 
     public void join(){
         try {
-            threadExecutor.shutdown();
             threadServer.join();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
