@@ -81,7 +81,7 @@ public class ConnectionHttpServerHttpClient {
                                         "Server: localhost\r\n" +
                                         "\r\n" +
                                         body).writeTo(client.getOutputStream());
-                    } if(query.length!=2 && query[0].equals("data") && path.equals("/hash")) {
+                    } if((query.length!=2 && query[0].equals("data") && path.equals("/hash"))||(path.equals("/hash") && !query[0].equals("data"))) {
                         http.parseResponse("HTTP/1.1 400 Bad Request\n" +
                                 "Content-Type: text/plain\n" +
                                 "Content-Length: 0\n" +
