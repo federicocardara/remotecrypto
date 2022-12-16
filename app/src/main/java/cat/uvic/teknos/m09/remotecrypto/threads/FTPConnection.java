@@ -15,6 +15,7 @@ import java.net.ConnectException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class FTPConnection extends PropertiesImp {
 
@@ -28,21 +29,23 @@ public class FTPConnection extends PropertiesImp {
         super(PROPERTIES_PATH);
     }
     /**
-     * Initialize thread for in time of ftp.properties declared, create .hash files from from files in ftp directory
+     * Initialize thread for in time of ftp.properties declared, create .hash files from files in ftp directory
      */
     public void init(){
         this.thread = new Thread(() -> {
             var timeApp = String.valueOf(this.props.get("time"));
-            LocalDateTime time;
+            Date time;
             SimpleDateFormat formatter = new SimpleDateFormat("hh:mm");
             while (!stop) {
-                time = LocalDateTime.now();
+                time = new Date();
                 String strDate = formatter.format(time);
                 if (timeApp.equals(strDate)) {
                     run();
                 }
             }
         });
+
+        this.thread.start();
     }
 
     private void run() {
@@ -62,8 +65,8 @@ public class FTPConnection extends PropertiesImp {
      */
     private void initConnection() throws ConnectException {
         try {
-            var url = String.valueOf(this.props.get("ftp_url"));
-            var port = Integer.parseInt(String.valueOf(this.props.get("ftp_port")));
+            var url = String.valueOf(this.props.get("host_url"));
+            var port = Integer.parseInt(String.valueOf(this.props.get("host_port")));
             var username = String.valueOf(this.props.get("username"));
             var password = String.valueOf(this.props.get("password"));
 
@@ -122,7 +125,7 @@ public class FTPConnection extends PropertiesImp {
     }
 
     public ByteArrayInputStream createContentFile(DigestResult encrypted){
-        return new ByteArrayInputStream((encrypted.getHash() + "\n" + encrypted.getAlgorithm() + "\n" + encrypted.getSalt()).getBytes());
+        return new ByteArrayInputStream((new String(encrypted.getHash()) + "\n" + encrypted.getAlgorithm() + "\n" + new String(encrypted.getSalt())).getBytes());
     }
 
     
