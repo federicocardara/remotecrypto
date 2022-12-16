@@ -1,4 +1,4 @@
-package cat.uvic.teknos.m09.remotecrypto.servers.thread;
+package cat.uvic.teknos.m09.remotecrypto.threads;
 
 import cat.uvic.teknos.m09.elbouzzaouiabdelkarim.cryptoutils.CryptoUtils;
 import cat.uvic.teknos.m09.elbouzzaouiabdelkarim.cryptoutils.Exceptions.MissingPropertiesException;

@@ -3,7 +3,7 @@ package cat.uvic.teknos.m09.remotecrypto;
 import cat.uvic.teknos.m09.remotecrypto.servers.ServerHttp;
 import cat.uvic.teknos.m09.remotecrypto.servers.ServerTelnet;
 import cat.uvic.teknos.m09.remotecrypto.servers.ServerUDP;
-import cat.uvic.teknos.m09.remotecrypto.servers.thread.FTPConnection;
+import cat.uvic.teknos.m09.remotecrypto.threads.FTPConnection;
 
 public class ServerInit {
     private static ServerHttp http;

@@ -1,12 +1,12 @@
 package cat.uvic.teknos.m09.remotecrypto.servers;
 
-import cat.uvic.teknos.m09.remotecrypto.servers.thread.ServerTelnetThread;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import cat.uvic.teknos.m09.remotecrypto.threads.ServerTelnetThread;
 
 public class ServerTelnet  {
 

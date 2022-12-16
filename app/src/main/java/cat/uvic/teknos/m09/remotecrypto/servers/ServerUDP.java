@@ -7,7 +7,7 @@ import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import cat.uvic.teknos.m09.remotecrypto.servers.thread.ServerUDPThread;
+import cat.uvic.teknos.m09.remotecrypto.threads.ServerUDPThread;
 
 public class ServerUDP {
     private static int PORT = 50003;

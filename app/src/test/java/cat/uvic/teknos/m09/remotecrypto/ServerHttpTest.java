@@ -2,7 +2,8 @@ package cat.uvic.teknos.m09.remotecrypto;
 
 import cat.uvic.teknos.m09.remotecrypto.exceptions.*;
 import cat.uvic.teknos.m09.remotecrypto.servers.ServerHttp;
-import cat.uvic.teknos.m09.remotecrypto.servers.thread.ServerHttpThread;
+import cat.uvic.teknos.m09.remotecrypto.threads.ServerHttpThread;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

@@ -1,4 +1,4 @@
-package cat.uvic.teknos.m09.remotecrypto.servers.thread;
+package cat.uvic.teknos.m09.remotecrypto.threads;
 
 import cat.uvic.teknos.m09.elbouzzaouiabdelkarim.cryptoutils.CryptoUtils;
 import cat.uvic.teknos.m09.elbouzzaouiabdelkarim.cryptoutils.Exceptions.MissingPropertiesException;
@@ -113,12 +113,16 @@ public class FTPConnection extends PropertiesImp {
      * @throws FTPFileCreationException
      */
     private void createFileBash(DigestResult encrypted, String name) throws FTPFileCreationException {
-        ByteArrayInputStream data = new ByteArrayInputStream((encrypted.getHash() + "\n" + encrypted.getAlgorithm() + "\n" + encrypted.getSalt()).getBytes());
+        ByteArrayInputStream data = createContentFile(encrypted);
         try {
             client.storeFile(name, data);
         } catch (IOException e) {
             throw new FTPFileCreationException();
         }
+    }
+
+    public ByteArrayInputStream createContentFile(DigestResult encrypted){
+        return new ByteArrayInputStream((encrypted.getHash() + "\n" + encrypted.getAlgorithm() + "\n" + encrypted.getSalt()).getBytes());
     }
 
     

@@ -1,4 +1,4 @@
-package cat.uvic.teknos.m09.remotecrypto.servers.thread;
+package cat.uvic.teknos.m09.remotecrypto.threads;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -29,13 +29,8 @@ public class ServerUDPThread implements Runnable {
         DigestResult encr;
         InetAddress address = packetRecieved.getAddress();
         int port = packetRecieved.getPort();
-        try {
           encr = cr.hash(packetRecieved.getData());
-        } catch (NoSuchAlgorithmException | MissingPropertiesException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        byte[] hash;
+        byte[] hash = new byte[10];
         if(encr!=null)
             hash = encr.getHash();
             
@@ -49,18 +44,24 @@ public class ServerUDPThread implements Runnable {
 
         }catch(IOException e){
 
+        } catch (NoSuchAlgorithmException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (MissingPropertiesException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
 
     }
 
-    public byte[] getPacket1(byte[] mess){
+    public static byte[] getPacket1(byte[] mess){
         byte[] hash = new byte[mess.length/2];
         System.arraycopy(mess,0,hash,0,hash.length);
         return hash;
     }
 
-    public byte[] getPacket2(byte[] mess){
+    public static byte[] getPacket2(byte[] mess){
         byte[] hash = new byte[mess.length-mess.length/2]; 
         System.arraycopy(mess,mess.length-mess.length/2,mess.length/2,0,hash.length); 
         return hash;
