@@ -5,7 +5,7 @@ import cat.uvic.teknos.m09.remotecrypto.servers.ServerTelnet;
 import cat.uvic.teknos.m09.remotecrypto.servers.ServerUDP;
 import cat.uvic.teknos.m09.remotecrypto.threads.FTPConnection;
 
-public class ServerInit {
+public class ServersInit {
     private static ServerHttp http;
     private static ServerTelnet telnet;
     private static FTPConnection ftpConnection;
@@ -13,7 +13,7 @@ public class ServerInit {
 
     
     /** 
-     * @param ...args
+     * @param args
      */
     public static void main(String ...args){
         try{
