@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Base64;
 
 public class ServerTelnetThread implements Runnable{
@@ -50,8 +51,14 @@ public class ServerTelnetThread implements Runnable{
         CryptoUtils cryptoUtils = new CryptoUtils();
         while (!data.equals("")){ //loop till client press enter key it repeats the process of reading and showing the text in base 64
             try {
-            String  str = new String(cryptoUtils.hash(data.getBytes()).getHash());
+                var digestResult = cryptoUtils.hash(data.getBytes());
+            String  str = Arrays.toString(digestResult.getHash());
+                outputStream.println("Hash:");
                 outputStream.println(str);
+                outputStream.println("Algorithm:");
+                outputStream.println(digestResult.getAlgorithm());
+                outputStream.println("Salt");
+                outputStream.println(Arrays.toString(digestResult.getSalt()));
             } catch (MissingPropertiesException e) {
                 throw new RuntimeException(e);
             } catch (NoSuchAlgorithmException e) {
