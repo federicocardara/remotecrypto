@@ -20,3 +20,4 @@ public class RemoteCryptoTerminalException extends RuntimeException{
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }
+

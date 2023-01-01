@@ -4,22 +4,17 @@
 package cat.uvic.teknos.m09.remotecrypto;
 
 import cat.uvic.teknos.m09.polsane.cryptoutils.CryptoUtils;
-import cat.uvic.teknos.m09.remotecrypto.servers.ClusterServer;
+import cat.uvic.teknos.m09.remotecrypto.servers.RemoteCrypto;
 import cat.uvic.teknos.m09.remotecrypto.servers.HttpServer;
 import cat.uvic.teknos.m09.remotecrypto.servers.TerminalServer;
 import org.junit.jupiter.api.Test;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.util.Arrays;
-
-import static java.util.Objects.hash;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TerminalServerTest {
     @Test void turnOnServers(){
-        ClusterServer clusterServer=new ClusterServer(50001,50002);
+        RemoteCrypto clusterServer=new RemoteCrypto(50001,50002);
         clusterServer.turnOnServers();
     }
     @Test void turnOnHttpServer(){
