@@ -6,6 +6,7 @@ import rawhttp.core.RawHttpRequest;
 import java.io.*;
 import java.net.Socket;
 import java.util.Base64;
+import java.util.Properties;
 
 public class ConnectionHttpServerHttpClient {
     private final Base64.Encoder encoder;
@@ -13,12 +14,19 @@ public class ConnectionHttpServerHttpClient {
     private RawHttp http;
     private String body = "";
 
+    private Properties properties = new Properties();
+
     private final String EXEMPLE_URI = "http://localhost:50002/hash?data=MESSAGE";
 
     public ConnectionHttpServerHttpClient(Socket socket) {
         this.client = socket;
         http = new RawHttp();
         encoder = Base64.getEncoder();
+        try {
+            properties.load(ConnectionHttpServerHttpClient.class.getResourceAsStream("/cryptoutils.properties"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void processRequestResponse(){
@@ -29,7 +37,7 @@ public class ConnectionHttpServerHttpClient {
             var data = "";
 
             try {
-                data=query[1];
+                data = query[1];
 
                 var hashData = CryptoUtils.hash(data.getBytes()).getHash();
 
@@ -87,11 +95,13 @@ public class ConnectionHttpServerHttpClient {
         if(b)
             message = encoder.encodeToString(message.getBytes());
 
-        String body="<!DOCTYPE html>\n" +
+        String body = "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<body>\n" +
-                "\n" + "<h1>Encrypted Message</h1>" +
-                "<p>"+message+"</p>\n" +
+                "\n" +
+                "<h1>Data To Hash</h1>\n" +
+                "<p>"+"Hash Byte In Base64: "+ message +"</p>\n" +
+                "<p>"+"Algorithm: "+properties.getProperty("hash.algorithm")+"</p>\n" +
                 "\n" +
                 "</body>\n" +
                 "</html>";
