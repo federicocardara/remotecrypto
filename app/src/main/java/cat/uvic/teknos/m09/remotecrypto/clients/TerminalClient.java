@@ -11,13 +11,13 @@ public class TerminalClient {
         var inputStream=new BufferedReader((new InputStreamReader(client.getInputStream())));
         var outputStream=new PrintWriter(client.getOutputStream());
 
-        outputStream.println("ggj");
+        outputStream.println("aaaa");
         outputStream.flush();
         inputStream.readLine();
         var hash=inputStream.readLine();
         System.out.println(hash);
 
-        outputStream.println("yyy");
+        outputStream.println("bbbb");
         outputStream.flush();
         inputStream.readLine();
         hash=inputStream.readLine();
