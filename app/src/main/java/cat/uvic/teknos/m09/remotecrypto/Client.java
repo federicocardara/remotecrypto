@@ -1,6 +1,7 @@
 package cat.uvic.teknos.m09.remotecrypto;
 
-import cat.uvic.teknos.m09.remotecrypto.exceptions.incorrectDataException;
+import cat.uvic.teknos.m09.remotecrypto.exceptions.RemoteCryptoHttpException;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Base64;
@@ -35,7 +36,7 @@ public class Client {
                 }
 
             } catch (IOException e) {
-                throw new incorrectDataException();
+                throw new RemoteCryptoHttpException();
             }
         }
 

@@ -6,45 +6,47 @@ import rawhttp.core.RawHttpRequest;
 import java.io.*;
 import java.net.Socket;
 import java.util.Base64;
+import java.util.Properties;
 
 public class ConnectionHttpServerHttpClient {
     private final Base64.Encoder encoder;
     private Socket client;
     private RawHttp http;
+    private String body = "";
+
+    private Properties properties = new Properties();
+
+    private final String EXEMPLE_URI = "http://localhost:50002/hash?data=MESSAGE";
+
     public ConnectionHttpServerHttpClient(Socket socket) {
         this.client = socket;
         http = new RawHttp();
         encoder = Base64.getEncoder();
+        try {
+            properties.load(ConnectionHttpServerHttpClient.class.getResourceAsStream("/cryptoutils.properties"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+
     public void processRequestResponse(){
         try {
-            RawHttpRequest request = http.parseRequest(client.getInputStream());
-            String queryStr= request.getUri().getQuery();
+            var request = http.parseRequest(client.getInputStream());
+            var queryStr= request.getUri().getQuery();
             String[] query = queryStr.split("=");
-            String data;
+            var data = "";
 
             try {
-                data=query[1];
-                System.out.println("si");
-
+                data = query[1];
 
                 var hashData = CryptoUtils.hash(data.getBytes()).getHash();
 
-                String hash = new String(hashData);
+                var hash = new String(hashData);
 
-                //System.out.println(takeHashUri(request));
-
-
-
-                String body="<!DOCTYPE html>\n" +
-                        "<html>\n" +
-                        "<body>\n" +
-                        "\n" +
-                        "<h1>Text to Base64</h1>\n" +
-                        "<p>"+hash+"</p>\n" +
-                        "\n" +
-                        "</body>\n" +
-                        "</html>";
+                if(takeHashUri(request) && !data.equals(null) && query[0].equals("data"))
+                    body = getHTML(String.valueOf(hash.getBytes()), true);
+                else
+                    body = getHTML("ERROR 404, EXEMPLE URI: Exemple: " + EXEMPLE_URI, false);
 
                 if(request.getMethod().equals("GET")) {
                     if (!data.equals("")) {
@@ -61,19 +63,9 @@ public class ConnectionHttpServerHttpClient {
                                 "Content-Length: 0\n" +
                                 "\n").writeTo(client.getOutputStream());
                     }
-                }else {
-                    //idk
                 }
             } catch (Exception e) {
-                String body="<!DOCTYPE html>\n" +
-                        "<html>\n" +
-                        "<body>\n" +
-                        "\n" +
-                        "<h1>Text to Base64</h1>\n" +
-                        "<p>"+"BAD HASH "+"</p>\n" +
-                        "\n" +
-                        "</body>\n" +
-                        "</html>";
+                var body = getHTML("ERROR 400, EXEMPLE URI: Exemple: " + EXEMPLE_URI, false);
 
                 http.parseResponse(
                         "HTTP/1.1 200 OK\r\n" +
@@ -84,8 +76,36 @@ public class ConnectionHttpServerHttpClient {
                                 body).writeTo(client.getOutputStream());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            body = getHTML("INCORRECT URI TO GET HASH MESSAGE, Exemple: " + EXEMPLE_URI, false);
+            try {
+                http.parseResponse(
+                        "HTTP/1.1 200 OK\r\n" +
+                                "Content-Type: html\r\n" +
+                                "Content-Length: " + body.length() + "\r\n" +
+                                "Server: localhost\r\n" +
+                                "\r\n" +
+                                body).writeTo(client.getOutputStream());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
+    }
+
+    private String getHTML(String message, boolean b){
+        if(b)
+            message = encoder.encodeToString(message.getBytes());
+
+        String body = "<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<body>\n" +
+                "\n" +
+                "<h1>Data To Hash</h1>\n" +
+                "<p>"+"Hash Byte In Base64: "+ message +"</p>\n" +
+                "<p>"+"Algorithm: "+properties.getProperty("hash.algorithm")+"</p>\n" +
+                "\n" +
+                "</body>\n" +
+                "</html>";
+        return body;
     }
 
     private boolean takeHashUri(RawHttpRequest request) {
@@ -101,5 +121,4 @@ public class ConnectionHttpServerHttpClient {
         else
             return false;
     }
-
 }

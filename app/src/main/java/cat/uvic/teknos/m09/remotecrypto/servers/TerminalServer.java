@@ -8,11 +8,13 @@ import java.net.ServerSocket;
 
 public class TerminalServer {
     private  final int SERVER_SOURCE_PORT;
+
     public TerminalServer(int SERVER_SOURCE_PORT) {
         this.SERVER_SOURCE_PORT=SERVER_SOURCE_PORT;
     }
 
     public  void turnOnServer()   {
+
         try {
             ServerSocket serverSocket= null;
             serverSocket = new ServerSocket(SERVER_SOURCE_PORT);
@@ -24,5 +26,6 @@ public class TerminalServer {
         } catch (IOException e) {
             throw new RemoteCryptoTerminalException("An error occurred while opening the socket or while waiting for a connection from a client",e);
         }
+
     }
 }

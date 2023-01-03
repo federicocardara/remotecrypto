@@ -14,12 +14,15 @@ public class Server {
     public static void main(String[] args) throws IOException {
         var server = new ServerSocket(PORT);
         System.out.println("Server listening on port " + server.getLocalPort());
+
         var client = server.accept();
         var end = true;
         while(end) {
             var inputStream = new BufferedReader(new InputStreamReader(client.getInputStream()));
             var outputStream = new PrintWriter(client.getOutputStream());
+
             var data = inputStream.readLine();
+
             if (data.equals(""))
                 end = false;
             else {
@@ -28,6 +31,7 @@ public class Server {
                 outputStream.flush();
             }
         }
+
         client.close();
     }
 }
